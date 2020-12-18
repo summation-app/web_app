@@ -1,0 +1,144 @@
+<template>
+  <section>
+	<h2>Connect to a Database</h2>
+    <v-alert
+      v-if="show_alert"
+      :type="alert_type"
+    >
+      {{ alert_text }}
+      <a v-if="alert_type=='error'" href="https://docs.summation.app/quick-start/adding-a-database">Get Help</a>
+    </v-alert>
+    <v-select v-model="database_type" :items="database_types" label="Database Type"></v-select>
+    <v-text-field
+      v-model="url"
+      label="URL"
+      required
+      outlined
+    ></v-text-field>
+    <v-text-field
+      v-model="port"
+      label="Port"
+      type="number"
+      required
+      outlined
+    ></v-text-field>
+    <v-text-field
+      v-model="username"
+      label="Username"
+      required
+      outlined
+    ></v-text-field>
+    <v-text-field
+      v-model="password"
+      label="Password"
+      required
+      outlined
+    ></v-text-field>
+    <v-text-field
+      v-model="database_name"
+      label="Database Name"
+      required
+      outlined
+    ></v-text-field>
+    <v-text-field
+      v-model="name"
+      label="a name for this connection"
+      outlined
+    ></v-text-field>
+    <br/>
+    <v-btn color="primary" @click="add_database" :loading="pending_submit">Save</v-btn>
+    <br/>
+    <br/>
+
+  </section>
+</template>
+
+<script>
+const axios = require('axios').default;
+
+export default {
+	props: ['user','token','gw'],
+	data() {
+		return {
+          pending_submit: false,
+          show_alert: false,
+          alert_type: 'success',
+          alert_text: null,
+          database_type: null,
+          database_types: [
+            {'text': 'MySQL', 'value': 'mysql'},
+            {'text': 'PostgreSQL', 'value': 'postgresql'},
+            {'text': 'Oracle', 'value': 'oracle'},
+            {'text': 'SQL Server', 'value': 'sql_server'},
+            {'text': 'SQLite', 'value': 'sqlite'},
+            {'text': 'MariaDB', 'value': 'mariadb'},
+            {'text': 'CockroachDB', 'value': 'cockroachdb'},
+            {'text': 'Redshift', 'value': 'redshift'},
+            {'text': 'Vertica', 'value': 'vertica'},
+            {'text': 'BigQuery', 'value': 'bigquery'},
+            {'text': 'Snowflake', 'value': 'snowflake'},
+            {'text': 'DB/2', 'value': 'db2'},
+            {'text': 'TimescaleDB', 'value': 'timescaledb'},
+            {'text': 'SAP HANA', 'value': 'sap_hana'}],
+          url: null,
+          port: 0,
+          username: null,
+          password: null,
+          name: null,
+          database_name: null,
+          schema: null
+		};
+	},
+	mounted: function() 
+    {
+      
+    },
+	watch: {
+		
+	},
+	computed: {
+		
+	},
+	methods: {
+      async add_database()
+      {
+        this.pending_submit = true
+        let self = this;
+
+        var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/add_database',
+        {
+          'engine': this.database_type,
+          'url': this.url,
+          'port': this.port,
+          'username': this.username,
+          'password': this.password,
+          'database_name': this.database_name,
+          'schema': this.schema,
+          'name': this.name
+        });
+        console.log(response);
+        if(response.data!=null)
+        {
+          if(response.data.status==true)
+          {
+            self.alert_text = "We were able to connect to your database!"
+            self.alert_type = 'success'
+            self.show_alert = true;
+          }
+          else
+          {
+            self.alert_text = "We were unable to connect to your database - please check your credentials or click here for help."
+            self.alert_type = 'error'
+            self.show_alert = true;
+          }
+        }
+        this.pending_submit = false
+        this.$emit('saved')
+      }
+	},
+	async created() 
+	{
+
+	}
+};
+</script>
