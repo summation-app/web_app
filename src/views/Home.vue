@@ -64,7 +64,7 @@ export default {
     {
       if(val!=null)
       {
-        fast_redirect()
+        this.fast_redirect()
       }
     }
   },
