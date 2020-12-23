@@ -11,13 +11,14 @@
 <script>
 
 export default {
+  props: ['user', 'token','gw','api_prefix'],
   data: function () 
   {
     return {}
   },
   created()
   {
-      this.fast_redirect()
+    
   },
   methods:
   {
@@ -56,7 +57,17 @@ export default {
         this.$router.push('/setup/1')
       }
     },
-  }
+  },
+  watch: 
+  {
+    'gw': function(val) 
+    {
+      if(val!=null)
+      {
+        fast_redirect()
+      }
+    }
+  },
 }
 </script>
 
