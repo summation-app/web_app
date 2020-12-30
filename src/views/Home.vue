@@ -18,7 +18,10 @@ export default {
   },
   created()
   {
-    
+    if(this.gw!=null)
+    {
+      this.fast_redirect()
+    }
   },
   methods:
   {
