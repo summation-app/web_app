@@ -243,7 +243,7 @@
 <script>
 const axios = require('axios').default;
 export default {
-	props: ['user','token','gw'],
+	props: ['user','token','gw','api_prefix'],
 	data() {
 		return {
 			pending_submit: false,
