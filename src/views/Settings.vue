@@ -323,102 +323,13 @@ export default {
     this.get_logging()
   },
   computed: {
-    roles: function () 
-    {
-      if (this.apps==undefined || this.apps.length==0 || this.selected_app==null)
-      {
-        return [];
-      }
-      else
-      {
-        var roles = [];
-        if(this.selected_app!=null && this.apps.length>0)
-        {
-          //iterate each
-          //if app_id matches this.selected_app
-          //append to roles {app_id, role_id, role_name}
-          for (const role of this.all_roles)
-          {
-            if(role.application_id==this.selected_app)
-            {
-              roles.push({'text': role.role_name, 'value': role.role_id});
-            }
-          }
-        }
-        return roles;
-      }
-    },
-    display_roles: function()
-    {
-      if(this.roles!=undefined && this.roles.length>0)
-        return true;
-      return false;
-    }
   },
   watch: {
-    selected_role(newValue, oldValue) 
-    {
-      //query database
-      this.get_database_tables_with_access_controls()
-    }
   },
   methods: {
-    async get_apps_roles()
-    {
-      this.pending_submit = true
-      var apps = [];
-      var response = await this.gw.query('SELECT id, name FROM applications')
-      if (response!=null && response.length>0)
-      {
-        this.apps = response;
-      }
-      var response = await this.gw.query("SELECT application_id, t2.id AS role_id, t2.name AS role_name FROM applications t1 INNER JOIN roles t2 ON (t1.id=t2.application_id)")
-      if (response!=null && response.length>0)
-      {
-        this.all_roles = response;
-      }
-    },
-    async get_access_controls()
-    {
-      this.pending_submit = true
-      var response = await this.gw.query("SELECT id, create_permission, read_permission, update_permission, delete_permission FROM access_controls WHERE scope='database' AND role_id=:role_id", {role_id: this.selected_role})
-      if (response!=null && response.length>0)
-      {
-        this.database_rows = response;
-      }
-
-      var response = await this.gw.query("SELECT id, get_permission, post_permission, delete_permission, patch_permission FROM access_controls WHERE scope='api' AND role_id=:role_id", {role_id: this.selected_role})
-      if (response!=null && response.length>0)
-      {
-        this.api_rows = response;
-      }
-    },
-    async get_database_tables_with_access_controls()
-    {
-      //tables aren't stored in the 'summation' database itself,
-      //as we dynamically connect to each database & create classes for each table
-      //to avoid having to keep a copy of metadata in our own database that's out-of-date
-      var response = await axios.post(this.api_prefix + '/database_tables_with_access_controls',
-      {
-        'token': localStorage.getItem('token'),
-        'role_id': this.selected_role
-      });
-      this.database_rows = response.data
-    },
     async save_integrations()
     {
 
-    },
-    async save_access_controls()
-    {
-      this.access_controls_saving = true;
-      var response = await axios.post(this.api_prefix + '/save_access_controls',
-      {
-        'token': localStorage.getItem('token'),
-        'role_id': this.selected_role,
-        'controls': this.database_rows
-      });
-      this.access_controls_saving = false;
     },
     async get_logging()
     {
