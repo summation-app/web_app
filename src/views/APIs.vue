@@ -11,7 +11,7 @@ const axios = require('axios').default;
 import DataTable from "@/components/DataTable.vue";
 
 export default {
-	props: ['user','token','gw','api_prefix'],
+	props: ['user','token','gw'],
 	data() {
 		return {
           pending_submit: false,
@@ -22,6 +22,7 @@ export default {
           password: null,
           name: null,
           database_name: null,
+          api_prefix: process.env.VUE_APP_API_PREFIX,
           schema: null,
           rows: [],
           headers: []

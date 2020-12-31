@@ -68,13 +68,14 @@ const axios = require('axios').default;
 import Plotly from 'plotly.js-basic-dist-min'
 
 export default {
-    props: ['user','token','api_prefix','gw','websocket_prefix'],
+    props: ['user','token','gw','websocket_prefix'],
     data() {
         return {
             loading_analytics: false,
             analytics_summary: {},
             duration: '7',
             log_history: [],
+            api_prefix: process.env.VUE_APP_API_PREFIX,
             demo_data: {
               summary_stats: {"impressions":6400,"subscribers":130,"conversion_rate":2.03125},
               protocol_stats: {"Google One Tap":{"2020-08-06":10,"2020-08-04":13,"2020-08-03":79},"Manual Email":{"2020-08-06":3,"2020-08-05":21,"2020-08-04":4}},

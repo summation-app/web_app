@@ -233,12 +233,13 @@ const axios = require('axios').default;
 import DataTable from "@/components/DataTable.vue";
 
 export default {
-  props: ['user', 'token','gw','api_prefix'],
+  props: ['user', 'token','gw'],
   data: function () {
   return {
     selected_tab: null,
     selected_app: null,
     selected_role: null,
+    api_prefix: process.env.VUE_APP_API_PREFIX,
     logging_loading: false,
     logging_credentials: {
       'aws_cloudwatch': {
