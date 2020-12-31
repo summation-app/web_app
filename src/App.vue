@@ -163,25 +163,14 @@ export default {
         }
 
         //leverage Axios interceptors to append the token to every request
-        /*axios.interceptors.request.use(async config => {
-            
-              if (config.method == 'get')
-              {
-                if (typeof config.params == 'undefined')
-                {
-                  config.params = new Object();
-                }
-                config.params.organization_id = self.selected_organization
-              }
-              else if(config.method == 'post')
-              {
-                config.data.organization_id = self.selected_organization
-              }
-            }
-            return config
-          }, (error) => {
-            return Promise.reject(error)
-          })*/
+        axios.interceptors.request.use(async config => {
+          //https://github.com/axios/axios#request-config
+          self.token = await firebase.auth().currentUser.getIdToken()//will refresh if necessary, or return cached
+          config.headers.Authorization = 'Bearer ' + self.token
+          return config
+        }, (error) => {
+          return Promise.reject(error)
+        })
   },
   components: {
     //'navigation-sidebar': NavigationSidebar,
@@ -343,7 +332,7 @@ export default {
       let self = this;
       document.title = to.meta.title || 'Summation'
       setTimeout(self.set_nav_bar_size, 1500);
-    }
+    },
   },
 
 }
