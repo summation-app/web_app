@@ -7,6 +7,7 @@
 </template>
 
 <script>
+const axios = require('axios').default;
 import DataTable from "@/components/DataTable.vue";
 
 export default {
@@ -43,11 +44,14 @@ export default {
       async get_APIs()
       {
         this.pending_submit = true
-        var response = await this.gw.query('SELECT * FROM "APIs"')
         this.table_loading = true
-        if (response!=null && response.length>0)
+        var response = await axios.post(self.api_prefix + '/apis',
         {
-          this.rows = response;
+          'token': self.token
+        })
+        if(response.data!=null)
+        {
+          this.rows = response.data;
 
           for (const [key, value] of Object.entries(response[0])) 
           {

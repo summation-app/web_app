@@ -57,6 +57,7 @@
 
       <!-- If using vue-router -->
       <router-view
+        v-if="gw"
         :api_prefix="api_prefix"
         :websocket_prefix="websocket_prefix"
         :user="user"
@@ -68,6 +69,15 @@
         @logged_in="initialize_gateway"
       >
       </router-view>
+      <div v-else>
+        <v-progress-circular
+        id="loading_spinner"
+        indeterminate
+        size=64
+        color="primary"
+        >
+        </v-progress-circular>
+      </div>
     </v-container>
   </v-content>
 

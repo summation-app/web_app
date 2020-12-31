@@ -270,20 +270,20 @@ export default {
 	  {
 		try
 		{
-		  this.pending_submit = true
-		  let self = this;
-		  //summation.get("http://api.ipapi.com/98.33.28.214", {});
-          var response = await this.gw.query("SELECT * FROM settings WHERE key=:key", {"key": "authentication_method"});
-		  console.log(response);
-		  this.pending_submit = false
-		  if (response!=null && response.length>0)
-		  {
-			  this.selected_auth_method = response[0].value.selected_auth_method;
-			  this.selected_jwt_method = response[0].value.selected_jwt_method;
-			  this.jwt_parameters = response[0].value.jwt_parameters;
-			  this.role_search_path = response[0].value.role_search_path;
-			  this.record_id = response[0].id;
-		  }
+			this.pending_submit = true
+			let self = this;
+			var response = await axios.get(self.api_prefix + '/auth_method',
+			{
+				'token': self.token
+			})
+			if(response.data!=null)
+			{
+				this.selected_auth_method = response.data.selected_auth_method;
+				this.selected_jwt_method = response.data.selected_jwt_method;
+				this.jwt_parameters = response.data.jwt_parameters;
+				this.role_search_path = response.data.role_search_path;
+			}
+			this.pending_submit = false
 		}
 		catch (error)
 		{
@@ -294,13 +294,20 @@ export default {
 	  {
 		try
 		{
-		  this.pending_submit = true
-		  let self = this;
-		  var all_values = {'selected_auth_method': this.selected_auth_method, 'selected_jwt_method': this.selected_jwt_method, 'jwt_parameters': this.jwt_parameters, 'role_search_path': this.role_search_path}
-		  var response = await this.gw.upsert("Settings", {"id": this.record_id, "key": "authentication_method", "value": all_values});
-		  console.log(response);
-		  this.pending_submit = false
-		  this.$emit('saved')
+			this.pending_submit = true
+			let self = this;
+			var all_values = {'selected_auth_method': this.selected_auth_method, 'selected_jwt_method': this.selected_jwt_method, 'jwt_parameters': this.jwt_parameters, 'role_search_path': this.role_search_path}
+			var response = await axios.post(self.api_prefix + '/auth_method',
+			{
+				'token': self.token,
+				'values': all_values
+			})
+			if(response.data!=null)
+			{
+
+			}
+			this.pending_submit = false
+			this.$emit('saved')
 		}
 		catch (error)
 		{

@@ -7,6 +7,7 @@
 </template>
 
 <script>
+const axios = require('axios').default;
 import DataTable from "@/components/DataTable.vue";
 
 export default {
@@ -43,17 +44,20 @@ export default {
       async get_databases()
       {
         this.pending_submit = true
-		var response = await this.gw.query("SELECT * FROM databases")
 		this.table_loading = true
-		if (response!=null && response.length>0)
-		{
-			this.rows = response;
+        var response = await axios.post(self.api_prefix + '/databases',
+        {
+          'token': self.token
+        })
+        if(response.data!=null)
+        {
+          this.rows = response.data;
 
-			for (const [key, value] of Object.entries(response[0])) 
-			{
-				this.headers.push({'text': key, 'value': key})
-			}
-		}
+          for (const [key, value] of Object.entries(response[0])) 
+          {
+            this.headers.push({'text': key, 'value': key})
+          }
+        }
         this.table_loading = false
       }
 	},

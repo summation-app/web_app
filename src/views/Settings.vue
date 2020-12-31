@@ -334,16 +334,15 @@ export default {
     async get_logging()
     {
       let self = this
-      var response = await this.gw.read("Settings", {'key': 'logging_config', 'organization_id': 0}, "summation")
-      if (response!=null)
-      {
-        self.logging_credentials = response.value
-      }
 
-      var response = await this.gw.read("Settings", {'key': 'logging_vendor', 'organization_id': 0}, "summation")
-      if (response!=null)
+      var response = await axios.post(self.api_prefix + '/logging',
       {
-        self.logging_vendor = response.value
+        'token': self.token
+      })
+      if(response.data!=null)
+      {
+        self.logging_credentials = response.data.logging_credentials;
+        self.logging_vendor = response.data.logging_vendor;
       }
     },
     async save_logging()
