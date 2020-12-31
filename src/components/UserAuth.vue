@@ -272,6 +272,7 @@ export default {
 		{
 			this.pending_submit = true
 			let self = this;
+			console.log('in get_auth_method api prefix is:' + self.api_prefix);
 			var response = await axios.get(self.api_prefix + '/auth_method',
 			{
 				'token': self.token
