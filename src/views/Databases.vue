@@ -50,7 +50,7 @@ export default {
         {
           'token': self.token
         })
-        if(response.data!=null)
+        if(response.data!=null && response.data.length>0)
         {
           this.rows = response.data;
 
