@@ -55,7 +55,7 @@ export default {
         {
           this.rows = response.data;
 
-          for (const [key, value] of Object.entries(response[0])) 
+          for (const [key, value] of Object.entries(response.data[0])) 
           {
             this.headers.push({'text': key, 'value': key})
           }
