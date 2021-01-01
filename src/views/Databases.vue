@@ -46,6 +46,7 @@ export default {
       {
         this.pending_submit = true
 		this.table_loading = true
+		let self = this
         var response = await axios.post(self.api_prefix + '/databases',
         {
           'token': self.token
