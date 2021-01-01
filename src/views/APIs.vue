@@ -44,6 +44,7 @@ export default {
 	methods: {
       async get_APIs()
       {
+        let self = this
         this.pending_submit = true
         this.table_loading = true
         var response = await axios.post(self.api_prefix + '/apis',
