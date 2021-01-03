@@ -147,7 +147,7 @@ export default {
           'title': 'Settings', 'icon': 'settings', 'link': '/settings'
         },
         {
-          'title': 'Help', 'icon': 'help', 'link': '/help'
+          'title': 'Help', 'icon': 'help', 'link': 'https://docs.summation.app/'
         }
       ],
     }
