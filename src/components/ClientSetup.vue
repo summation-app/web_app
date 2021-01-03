@@ -120,9 +120,7 @@
 						Get your data by running a query:
 					<vue-code-highlight language="javascript">
 					<pre>
-					val params = HashMap\<String, Any\>()
-					params.put("id", 1)
-					val response = client.query("SELECT * FROM queries WHERE id=:id", params)
+					val response = client.query("SELECT * FROM queries WHERE id=:id", params)//params are a HashMap you pass in
 					</pre>
 					</vue-code-highlight>
 					</li>
