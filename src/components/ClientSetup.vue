@@ -64,27 +64,68 @@
 			</v-tab-item>
 			<v-tab-item key='ios'>
 				<ol>
-					<li>Cocoapods: pod 'Summation-iOS-Client'</li>
-					<li>import Summation_iOS_Client</li>
-					<li>let options = SummationOptions(gatewayUrl: gatewayUrl, token: token,
+					<li>Install the library:
+						<vue-code-highlight language="javascript">
+					<pre>Cocoapods: pod 'Summation-iOS-Client'
+						</pre>
+						</vue-code-highlight>
+					</li>
+					<li>Import the library into your app:
+						<vue-code-highlight language="">
+							<pre>
+							import Summation_iOS_Client
+							</pre>
+							</vue-code-highlight>
+					</li>
+					<li>Initialize the gateway:
+						<vue-code-highlight language="javascript">
+					<pre>
+						let options = SummationOptions(gatewayUrl: gatewayUrl, token: token,
                                        gatewayToken: gateway_token, defaultDatabase: defaultDatabase)
-        summationClient.setOptions(options)
-        _ = summationClient.db(.query(sql: "SELECT * FROM queries WHERE id=:id", parameters: ["id": 1], databaseName: defaultDatabase))</li>
+        				summationClient.setOptions(options)
+						</pre>
+						</vue-code-highlight>
+						</li>
+						<li>
+							Get your data by running a query:
+        			<vue-code-highlight>
+						<pre>
+							results = summationClient.db(.query(sql: "SELECT * FROM queries WHERE id=:id", parameters: ["id": 1], databaseName: defaultDatabase))
+							</pre>
+							</vue-code-highlight>
+							</li>
 				</ol>
 			</v-tab-item>
 			<v-tab-item key='android'>
 				<ol>
-					<li>Gradle: implementation("app.summation.android:android-client:1.0")</li>
-					<li>val client = Client(
+					<li>
+						Install the library: 
+						<vue-code-highlight language="javascript">
+					<pre>
+						Gradle: implementation("app.summation.android:android-client:1.0")
+						</pre>
+						</vue-code-highlight>
+					</li>
+					<li>
+						Initialize the gateway:
+						<vue-code-highlight language="javascript">
+						<pre>val client = Client(
 						gatewayUrl = "<your gateway url>",
 						token = "<your token>",
 						gatewayToken = "<your gateway token>",
 						defaultDatabase = "<your database name>",
-					)
+					)</pre></vue-code-highlight>
+					</li>
+					<li>
+						Get your data by running a query:
+					<vue-code-highlight language="javascript">
+					<pre>
 					val params = HashMap<String, Any>()
 					params.put("id", 1)
 					val response = client.query("SELECT * FROM queries WHERE id=:id", params)
-					println(response)</li>
+					</pre>
+					</vue-code-highlight>
+					</li>
 				</ol>
 			</v-tab-item>
 			</v-tabs-items>
