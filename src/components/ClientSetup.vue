@@ -110,10 +110,10 @@
 						Initialize the gateway:
 						<vue-code-highlight language="javascript">
 						<pre>val client = Client(
-						gatewayUrl = "<your gateway url>",
-						token = "<your token>",
-						gatewayToken = "<your gateway token>",
-						defaultDatabase = "<your database name>",
+						gatewayUrl = "your gateway url",
+						token = "your token",
+						gatewayToken = "your gateway token",
+						defaultDatabase = "your database name",
 					)</pre></vue-code-highlight>
 					</li>
 					<li>
