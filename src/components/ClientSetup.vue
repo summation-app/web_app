@@ -59,7 +59,7 @@
 					results = gw.query("SELECT * FROM table WHERE id=:id", {id: 4}, "prod"))
 					</pre>
 					</vue-code-highlight>
-					<li>
+					</li>
 				</ol>
 			</v-tab-item>
 			<v-tab-item key='ios'>
@@ -120,7 +120,7 @@
 						Get your data by running a query:
 					<vue-code-highlight language="javascript">
 					<pre>
-					val params = HashMap<String, Any>()
+					val params = HashMap\<String, Any\>()
 					params.put("id", 1)
 					val response = client.query("SELECT * FROM queries WHERE id=:id", params)
 					</pre>
