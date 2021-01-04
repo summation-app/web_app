@@ -81,14 +81,14 @@
 						<vue-code-highlight language="javascript">
 					<pre>
 						let options = SummationOptions(gatewayUrl: gatewayUrl, token: token,
-                                       gatewayToken: gateway_token, defaultDatabase: defaultDatabase)
-        				summationClient.setOptions(options)
+									   gatewayToken: gateway_token, defaultDatabase: defaultDatabase)
+						summationClient.setOptions(options)
 						</pre>
 						</vue-code-highlight>
 						</li>
 						<li>
 							Get your data by running a query:
-        			<vue-code-highlight>
+					<vue-code-highlight>
 						<pre>
 							results = summationClient.db(.query(sql: "SELECT * FROM queries WHERE id=:id", parameters: ["id": 1], databaseName: defaultDatabase))
 							</pre>
@@ -148,9 +148,9 @@ export default {
 		};
 	},
 	mounted: function() 
-    {
-      
-    },
+	{
+	  
+	},
 	watch: {
 
 	},
