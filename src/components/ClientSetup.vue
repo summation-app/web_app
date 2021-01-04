@@ -8,6 +8,8 @@
 			required>
 		</v-text-field>
 		<v-btn color="primary" @click="generate_gateway_keys()" :loading="pending_submit">Generate Keys</v-btn>
+		<br/>
+		<br/>
 		<div v-if="show_instructions">
 			<div>Please select a language to see the setup instructions:</div>
 			<v-tabs
@@ -30,21 +32,27 @@
 				<vue-code-highlight language="javascript">
 					<pre>npm install --save summation_web_client</pre>
 				</vue-code-highlight>
+				<br/>
+				<br/>
 				2.  Add this import to your JavaScript code:
 				<vue-code-highlight language="javascript">
 					<pre>import Summation from 'summation_web_client';</pre>
 				</vue-code-highlight>
+				<br/>
+				<br/>
 				3.  Initialize the gateway:
 				<vue-code-highlight language="javascript">
-					<pre>
-					const gw = new Summation({
-					gateway_url: YOUR_GATEWAY_URL,
-					token: USER_TOKEN,
-					gateway_token: GATEWAY_TOKEN,
-					default_database: "YOUR_DATABASE_NAME"
-					});
-					</pre>
+<pre>
+const gw = new Summation({
+gateway_url: YOUR_GATEWAY_URL,
+token: USER_TOKEN,
+gateway_token: GATEWAY_TOKEN,
+default_database: "YOUR_DATABASE_NAME"
+});
+</pre>
 				</vue-code-highlight>
+				<br/>
+				<br/>
 				4.  Get your data by running a query:
 				<vue-code-highlight language="javascript">
 					<pre>results = gw.query("SELECT * FROM table WHERE id=:id", {id: 4}, "prod"))</pre>
@@ -55,16 +63,23 @@
 				<vue-code-highlight language="javascript">
 					<pre>Cocoapods: pod 'Summation-iOS-Client'</pre>
 				</vue-code-highlight>
+				<br/>
+				<br/>
 				2.  Import the library into your app:
 				<vue-code-highlight language="">
 					<pre>import Summation_iOS_Client</pre>
 				</vue-code-highlight>
-				
+				<br/>
+				<br/>				
 				3.  Initialize the gateway:
 				<vue-code-highlight language="javascript">
-					<pre>let options = SummationOptions(gatewayUrl: gatewayUrl, token: token, gatewayToken: gateway_token, defaultDatabase: defaultDatabase)
-					summationClient.setOptions(options)</pre>
+<pre>
+let options = SummationOptions(gatewayUrl: gatewayUrl, token: token, gatewayToken: gateway_token, defaultDatabase: defaultDatabase)
+summationClient.setOptions(options)
+</pre>
 				</vue-code-highlight>
+				<br/>
+				<br/>
 				4.  Get your data by running a query:
 				<vue-code-highlight>
 					<pre>results = summationClient.db(.query(sql: "SELECT * FROM queries WHERE id=:id", parameters: ["id": 1], databaseName: defaultDatabase))</pre>
@@ -75,16 +90,21 @@
 				<vue-code-highlight language="javascript">
 					<pre>Gradle: implementation("app.summation.android:android-client:1.0")</pre>
 						</vue-code-highlight>
+				<br/>
+				<br/>
 				2.  Initialize the gateway:
 				<vue-code-highlight language="javascript">
-					<pre>val client = Client(
-						gatewayUrl = "your gateway url",
-						token = "your token",
-						gatewayToken = "your gateway token",
-						defaultDatabase = "your database name",
-					)
-					</pre>
+<pre>
+val client = Client(
+	gatewayUrl = "your gateway url",
+	token = "your token",
+	gatewayToken = "your gateway token",
+	defaultDatabase = "your database name",
+)
+</pre>
 				</vue-code-highlight>
+				<br/>
+				<br/>
 				3.  Get your data by running a query:
 				<vue-code-highlight language="javascript">
 					<pre>val response = client.query("SELECT * FROM queries WHERE id=:id", params)//params are a HashMap you pass in</pre>
