@@ -117,7 +117,7 @@ val client = Client(
             dense
             type="warning"
           	>
-          	Need help?  See the <a href='https://docs.summation.app'>full documentation</a>, or ask for help on the <a href='http://chat.summation.app'>chat group</a>.
+          	Need help?  See the <a href='https://docs.summation.app'>full documentation</a>, or ask for help on the <a href='https://discord.gg/mkp6jxu9r2'>chat group</a>.
           </v-alert>
 		</div>
   </section>
