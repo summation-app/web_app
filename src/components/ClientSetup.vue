@@ -111,6 +111,14 @@ val client = Client(
 				</vue-code-highlight>
 			</v-tab-item>
 			</v-tabs-items>
+			<br/>
+			<br/>
+			<v-alert
+            dense
+            type="warning"
+          	>
+          	Need help?  See the <a href='https://docs.summation.app'>full documentation</a>, or ask for help on the <a href='http://chat.summation.app'>chat group</a>.
+          </v-alert>
 		</div>
   </section>
 </template>
