@@ -173,6 +173,7 @@
 			v-model="jwt_parameters.audience"
 			:counter="256"
 			label="Firebase Project ID">
+			</v-text-field>
 		</v-row>
 		<v-row v-if="selected_jwt_method=='cognito'">
 			<v-text-field
