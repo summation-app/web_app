@@ -169,7 +169,10 @@
 			</v-col>
 		</v-row>
 		<v-row v-if="selected_jwt_method=='firebase'">
-			You're all set!
+			<v-text-field
+			v-model="jwt_parameters.audience"
+			:counter="256"
+			label="Firebase Project ID">
 		</v-row>
 		<v-row v-if="selected_jwt_method=='cognito'">
 			<v-text-field
