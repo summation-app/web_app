@@ -165,7 +165,7 @@ export default {
         //leverage Axios interceptors to append the token to every request
         axios.interceptors.request.use(async config => {
           //https://github.com/axios/axios#request-config
-          self.token = await firebase.auth().currentUser.getIdToken()//will refresh if necessary, or return cached
+          self.token = localStorage.getItem('token')
           config.headers.Authorization = 'Bearer ' + self.token
           return config
         }, (error) => {
