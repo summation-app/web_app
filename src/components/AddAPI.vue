@@ -81,7 +81,7 @@
 				<v-icon size=250 style="margin: 0 auto; width: 100%; color: #1976d2">mdi-alternate_email</v-icon>
 			</v-col>
 		</v-row>
-		<v-btn color="primary" @click="add_api" :loading="pending_submit">Save</v-btn>
+		<v-btn color="primary" @click="save_api" :loading="pending_submit">Save</v-btn>
 	</v-container>
   </section>
 </template>
@@ -90,7 +90,7 @@
 const axios = require('axios').default;
 
 export default {
-	props: ['user','token','gw','selected_organization','selected_website_id'],
+	props: ['user','token','gw','item'],
 	data() {
 		return {
 			pending_submit: false,
@@ -114,19 +114,33 @@ export default {
 		console.log(result)
 	},
 	watch: {
-		
+		item: function(val)
+		{
+			if(item!=null)
+			{
+				this.copy_item_values()
+			}
+		}
 	},
 	computed: {
 		
 	},
 	methods: {
-	  async add_api()
+	  copy_item_values()
+      {
+        //we're editing an existing connection
+        this.method = this.item.method
+        this.auth_method = this.item.auth_method
+        this.url = this.item.url
+        this.production_key = this.item.production_key
+		this.development_key = this.item.development_key
+      },
+	  async save_api()
 	  {
 		this.pending_submit = true
 		let self = this;
 
-		var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/add_api',
-        {
+		var params = {
 		  'url': self.url,
 		  //'body': this.body,
 		  'header_key': self.header_key,
@@ -135,7 +149,20 @@ export default {
 		  'authentication': {'auth_method': self.auth_method},
 		  'bearer_token': self.bearer_token,
 		  'basic_auth': self.basic_auth
-        });
+        };
+
+		if(this.item==null)
+        {
+          //saving a new API
+          var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/save_api', params);
+        }
+        else
+        {
+          //editing an existing API
+          params.id = self.item.id;
+          var response = await axios.patch(process.env.VUE_APP_API_PREFIX + '/save_api', params);
+        }
+		
 		console.log(response);
 		this.pending_submit = false
 		this.$emit('saved')
@@ -146,7 +173,10 @@ export default {
 	},
 	async created() 
 	{
-
+		if(this.item!=null)
+		{
+			this.copy_item_values()
+		}
 	}
 };
 </script>

@@ -14,6 +14,7 @@ const Databases = () => import('@/views/Databases')
 const APIs = () => import('@/views/APIs')
 const AddAPI = () => import('@/components/AddAPI')
 const AddDatabase = () => import('@/components/AddDatabase')
+const Security = () => import('@/views/Security')
 
 Vue.use(Router)
 
@@ -95,6 +96,14 @@ let router = new Router({
       path: '/settings',
       name: 'Settings',
       component: Settings,
+      meta: {
+        auth: true
+      }
+    },
+    {
+      path: '/security',
+      name: 'Security',
+      component: Security,
       meta: {
         auth: true
       }

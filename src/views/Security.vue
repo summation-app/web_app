@@ -1,0 +1,122 @@
+<template>
+	<section>
+		<v-tabs
+		v-model="selected_tab"
+		grow
+		>
+      <v-tab key='database_queries'>
+        Approved Database Queries
+      </v-tab>
+      <v-tab key='api_requests'>
+        Approved API Requests
+      </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="selected_tab">
+		<v-tab-item key='database_queries'>
+			<h2></h2>
+			<data_table :headers="approved_queries_headers" :rows="approved_queries_rows" :table_loading="table_loading" @delete_item="delete_item"></data_table>
+		</v-tab-item>
+		<v-tab-item key='api_requests'>
+			<h2></h2>
+			<data_table :headers="approved_requests_headers" :rows="approved_requests_rows" :table_loading="table_loading" @delete_item="delete_item"></data_table>
+		</v-tab-item>
+	</v-tabs-items>
+	</section>
+</template>
+
+<script>
+const axios = require('axios').default;
+import DataTable from "@/components/DataTable.vue";
+
+export default {
+	props: ['user','token','gw'],
+	data() {
+		return {
+		  pending_submit: false,
+		  table_loading: false,
+		  selected_tab: null,
+		  approved_queries_rows: [],
+		  approved_requests_rows: [],
+		  approved_queries_headers: [],
+		  approved_requests_headers: [],
+		  show_delete_dialog: false,
+		  item_to_delete: null,
+		};
+	},
+	mounted: function() 
+    {
+      
+    },
+	watch: {
+		
+	},
+	computed: {
+		
+	},
+	components: {
+	  'data_table': DataTable,
+    },
+	methods: {
+      async get_approved_queries_requests()
+      {
+        this.pending_submit = true
+		this.table_loading = true
+		let self = this
+        var response = await axios.get(self.api_prefix + '/approved_queries_requests')
+        if(response.data!=null && response.data.length>0)
+        {
+		  this.approved_requests_rows = response.data.requests;
+		  this.approved_queries_rows = response.data.queries;
+
+          for (const [key, value] of Object.entries(response.data.requests[0])) 
+          {
+            this.approved_requests_headers.push({'text': key, 'value': key})
+		  }
+		  this.approved_requests_headers.push({ text: 'Actions', value: 'actions', sortable: false });
+		  for (const [key, value] of Object.entries(response.data.queries[0])) 
+          {
+            this.approved_queries_headers.push({'text': key, 'value': key})
+		  }
+		  this.approved_queries_headers.push({ text: 'Actions', value: 'actions', sortable: false });
+        }
+		this.table_loading = false
+	  },
+	  delete_item(item)
+	  {
+		console.log('delete item:' + item)
+		this.item_to_delete = item
+	  },
+	  close_delete()
+	  {
+		this.show_delete_dialog = false;
+	  },
+	  async delete_item_confirm()
+	  {
+		let self = this
+        var response = await axios.delete(self.api_prefix + '/approved_queries_requests',
+        {
+		  'id': self.item_to_delete.id,
+		  'type': self.item_to_delete.type
+        })
+        if(response.data!=null && response.data.length>0)
+        {
+			//refresh the list
+			await self.get_approved_queries_requests()
+		}
+	  }
+	},
+	async created() 
+	{
+		await this.get_approved_queries_requests()
+	}
+};
+</script>
+
+<style scoped>
+#add_button
+{
+	float: right;
+	margin: 10px;
+}
+</style>

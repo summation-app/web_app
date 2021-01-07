@@ -67,6 +67,21 @@
       </v-data-table>
       </td>
     </template>
+    <template v-slot:item.actions="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="this.$emit('edit_item', item)"
+      >
+        mdi-pencil
+      </v-icon>
+      <v-icon
+        small
+        @click="this.$emit('delete_item', item)"
+      >
+        mdi-delete
+      </v-icon>
+    </template>
     </v-data-table>
   </section>
 </template>
@@ -84,7 +99,7 @@ export default {
           name: null,
           database_name: null,
           schema: null,
-          search: ''
+          search: '',
 		};
 	},
 	mounted: function() 
@@ -94,9 +109,9 @@ export default {
 	watch: {
 		
 	},
-	computed: {
-		
-	},
+  computed: {
+  
+  },
 	methods: {
       
 	},

@@ -46,7 +46,7 @@
       outlined
     ></v-text-field>
     <br/>
-    <v-btn color="primary" @click="add_database" :loading="pending_submit">Save</v-btn>
+    <v-btn color="primary" @click="save_database" :loading="pending_submit">Save</v-btn>
     <br/>
     <br/>
 
@@ -57,7 +57,7 @@
 const axios = require('axios').default;
 
 export default {
-	props: ['user','token','gw'],
+	props: ['user','token','gw','item'],
 	data() {
 		return {
           pending_submit: false,
@@ -94,19 +94,36 @@ export default {
       
     },
 	watch: {
-		
+    item: function(val)
+    {
+      if(val!=null)
+      {
+        this.copy_item_values()
+      }
+    }
 	},
 	computed: {
 		
 	},
 	methods: {
-      async add_database()
+      copy_item_values()
+      {
+        //we're editing an existing connection
+        this.database_type = this.item.engine
+        this.url = this.item.url
+        this.port = this.item.port
+        this.username = this.item.username
+        this.password = this.item.password
+        this.database_name = this.item.database_name
+        this.schema = this.item.schema
+        this.name = this.item.name
+      },
+      async save_database()
       {
         this.pending_submit = true
         let self = this;
 
-        var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/add_database',
-        {
+        var params = {
           'engine': this.database_type,
           'url': this.url,
           'port': this.port,
@@ -115,7 +132,19 @@ export default {
           'database_name': this.database_name,
           'schema': this.schema,
           'name': this.name
-        });
+        };
+
+        if(this.item==null)
+        {
+          //saving a new database
+          var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/save_database', params);
+        }
+        else
+        {
+          //editing an existing database
+          params.id = self.item.id;
+          var response = await axios.patch(process.env.VUE_APP_API_PREFIX + '/save_database', params);
+        }
         console.log(response);
         if(response.data!=null)
         {
@@ -138,7 +167,10 @@ export default {
 	},
 	async created() 
 	{
-
+    if(this.item!=null)
+    {
+      this.copy_item_values()
+    }
 	}
 };
 </script>
