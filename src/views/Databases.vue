@@ -12,7 +12,7 @@
               <span class="headline">Edit Item</span>
             </v-card-title>
 
-            <database_form :item="item" @saved="get_databases"></database_form>
+            <database_form :item="edited_item" @saved="get_databases"></database_form>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -51,6 +51,7 @@ export default {
 		return {
 		  pending_submit: false,
 		  table_loading: false,
+		  api_prefix: process.env.VUE_APP_API_PREFIX,
 		  rows: [],
 		  headers: [],
 		  show_edit_dialog: false,
