@@ -2,7 +2,7 @@
   <section>
     <router-link to="/add/api"><v-btn id='add_button' color='success'>Add an API</v-btn></router-link>
 	  <br/><br/>
-    <data_table :headers="headers" :rows="rows" :table_loading="table_loading"></data_table>
+    <data_table :headers="headers" :rows="rows" :table_loading="table_loading" @edit_item="edit_item" @delete_item="delete_item"></data_table>
     <v-dialog
           v-model="show_edit_dialog"
           max-width="500px"
@@ -12,7 +12,7 @@
               <span class="headline">Edit Item</span>
             </v-card-title>
 
-            <api_form :item="edited_item"></api_form>
+            <api_form :item="edited_item" @saved="get_APIs"></api_form>
 
             <v-card-actions>
               <v-spacer></v-spacer>
