@@ -12,7 +12,7 @@
               <span class="headline">Edit Item</span>
             </v-card-title>
 
-            <api_form :item="item"></api_form>
+            <api_form :item="edited_item"></api_form>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -80,6 +80,8 @@ export default {
         let self = this
         this.pending_submit = true
         this.table_loading = true
+        self.rows = []
+		    self.headers = []
         var response = await axios.post(self.api_prefix + '/apis',
         {
           'token': self.token
@@ -110,6 +112,7 @@ export default {
       {
         console.log('delete item:' + item)
         this.item_to_delete = item
+        this.show_delete_dialog = true
       },
       close_delete()
       {
@@ -119,14 +122,18 @@ export default {
       {
         let self = this
         var response = await axios.delete(self.api_prefix + '/save_database',
-        {
-          'id': self.item_to_delete.id
-        })
+        { 
+          data: 
+          {
+                  'id': self.item_to_delete.id
+          }
+        });
         if(response.data!=null && response.data.length>0)
         {
           //refresh the list
           await self.get_APIs()
         }
+        this.show_delete_dialog = false;
       }
 	},
 	async created() 
