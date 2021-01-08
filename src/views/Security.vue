@@ -65,7 +65,7 @@ export default {
 		this.table_loading = true
 		let self = this
         var response = await axios.get(self.api_prefix + '/approved_queries_requests')
-        if(response.data!=null && response.data.length>0)
+        if(response.data!=null)
         {
 		  this.approved_requests_rows = response.data.requests;
 		  this.approved_queries_rows = response.data.queries;
