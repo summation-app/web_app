@@ -95,8 +95,29 @@ export default {
 	  async enable_changed(item)
       {
 		//only enabling/disabling
-        let self = this;
-		item.loading = true;
+		let self = this;
+		var selected_row_index = -1;
+		if(item.type=='api_request')
+		{
+			iterable = this.approved_requests_rows
+		}
+		else
+		{
+			iterable = this.approved_queries_rows
+		}
+		iterable.forEach(function (value, i) 
+		{
+    		if(value.id==item.id)
+			{
+				selected_row_index = i
+				break;
+			}
+		});
+		if(selected_row_index!=-1)
+		{
+			iterable[selected_row_index].loading = true;
+		}
+
         var params = {
 		  'id': item.id,
 		  'record_type': item.type,
@@ -109,7 +130,10 @@ export default {
         {
           
 		}
-		item.loading = false;
+		if(selected_row_index!=-1)
+		{
+			iterable[selected_row_index].loading = false;
+		}
       },
 	  delete_item(item)
 	  {
