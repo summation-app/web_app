@@ -70,16 +70,22 @@ export default {
 		  this.approved_requests_rows = response.data.requests;
 		  this.approved_queries_rows = response.data.queries;
 
-          for (const [key, value] of Object.entries(response.data.requests[0])) 
-          {
-            this.approved_requests_headers.push({'text': key, 'value': key})
+		  if(response.data.requests.length > 0)
+		  {
+			for (const [key, value] of Object.entries(response.data.requests[0])) 
+			{
+				this.approved_requests_headers.push({'text': key, 'value': key})
+			}
+			this.approved_requests_headers.push({ text: 'Actions', value: 'actions', sortable: false });
 		  }
-		  this.approved_requests_headers.push({ text: 'Actions', value: 'actions', sortable: false });
-		  for (const [key, value] of Object.entries(response.data.queries[0])) 
-          {
-            this.approved_queries_headers.push({'text': key, 'value': key})
+		  if(response.data.queries.length > 0)
+		  {
+			for (const [key, value] of Object.entries(response.data.queries[0]))
+			{
+				this.approved_queries_headers.push({'text': key, 'value': key})
+			}
+			this.approved_queries_headers.push({ text: 'Actions', value: 'actions', sortable: false });
 		  }
-		  this.approved_queries_headers.push({ text: 'Actions', value: 'actions', sortable: false });
         }
 		this.table_loading = false
 	  },
