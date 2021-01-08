@@ -97,6 +97,7 @@ export default {
 		//only enabling/disabling
 		let self = this;
 		var selected_row_index = -1;
+		var iterable = null;
 		if(item.type=='api_request')
 		{
 			iterable = this.approved_requests_rows
@@ -110,7 +111,6 @@ export default {
     		if(value.id==item.id)
 			{
 				selected_row_index = i
-				break;
 			}
 		});
 		if(selected_row_index!=-1)
