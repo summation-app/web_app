@@ -121,15 +121,19 @@ export default {
 	  async delete_item_confirm()
 	  {
 		let self = this
-        var response = await axios.delete(self.api_prefix + '/save_database',
-        {
-          'id': self.item_to_delete.id
-        })
+		var response = await axios.delete(self.api_prefix + '/save_database',
+		{ 
+			data: 
+			{
+          		'id': self.item_to_delete.id
+			}
+		});
         if(response.data!=null && response.data.length>0)
         {
 			//refresh the list
 			await self.get_databases()
 		}
+		this.show_delete_dialog = false;
 	  }
 	},
 	async created() 
