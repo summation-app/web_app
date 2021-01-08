@@ -86,6 +86,7 @@
       <v-switch
       v-model="item.enabled"
       @change="$emit('enable_changed', item)"
+      :loading="item.loading"
       ></v-switch>
     </template>
     </v-data-table>

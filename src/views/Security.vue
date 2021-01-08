@@ -96,7 +96,7 @@ export default {
       {
 		//only enabling/disabling
         let self = this;
-
+		item.loading = true;
         var params = {
 		  'id': item.id,
 		  'record_type': item.type,
@@ -108,7 +108,8 @@ export default {
         if(response.data!=null && response.data==true)
         {
           
-        }
+		}
+		item.loading = false;
       },
 	  delete_item(item)
 	  {
