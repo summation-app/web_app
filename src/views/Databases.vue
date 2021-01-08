@@ -128,7 +128,7 @@ export default {
           		'id': self.item_to_delete.id
 			}
 		});
-        if(response.data!=null && response.data.length>0)
+        if(response.data!=null && response.data.status==true)
         {
 			//refresh the list
 			await self.get_databases()

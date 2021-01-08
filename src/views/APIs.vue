@@ -122,14 +122,14 @@ export default {
       async delete_item_confirm()
       {
         let self = this
-        var response = await axios.delete(self.api_prefix + '/save_database',
+        var response = await axios.delete(self.api_prefix + '/save_api',
         { 
           data: 
           {
-                  'id': self.item_to_delete.id
+            'id': self.item_to_delete.id
           }
         });
-        if(response.data!=null && response.data.length>0)
+        if(response.data!=null && response.data.status==true)
         {
           //refresh the list
           await self.get_APIs()

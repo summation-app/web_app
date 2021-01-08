@@ -144,7 +144,7 @@ export default {
           'title': 'Logs', 'icon': 'show_chart', 'link': '/analytics'
         },
         {
-          'title': 'Security', 'icon': 'show_chart', 'link': '/security'
+          'title': 'Security', 'icon': 'fingerprint', 'link': '/security'
         },
         {
           'title': 'Settings', 'icon': 'settings', 'link': '/settings'
