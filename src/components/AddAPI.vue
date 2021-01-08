@@ -110,8 +110,7 @@ export default {
 	},
 	mounted: function() 
 	{
-		var result = this.gw.chain.addNumber(10, 20).multiplyNumber(10).divideNumber(10);
-		console.log(result)
+		
 	},
 	watch: {
 		item: function(val)
@@ -148,7 +147,8 @@ export default {
 		  'development_key': self.development_key,
 		  'authentication': {'auth_method': self.auth_method},
 		  'bearer_token': self.bearer_token,
-		  'basic_auth': self.basic_auth
+		  'basic_auth': self.basic_auth,
+		  'method': self.method
         };
 
 		if(this.item==null)

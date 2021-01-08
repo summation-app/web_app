@@ -97,6 +97,7 @@ export default {
           this.headers.push({ text: 'Actions', value: 'actions', sortable: false });
         }
         this.table_loading = false
+        this.show_edit_dialog = false
       },
       close_item_editor()
       {
