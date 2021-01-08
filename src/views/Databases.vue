@@ -80,6 +80,8 @@ export default {
         this.pending_submit = true
 		this.table_loading = true
 		let self = this
+		self.rows = []
+		self.headers = []
         var response = await axios.post(self.api_prefix + '/databases',
         {
           'token': self.token
@@ -110,6 +112,7 @@ export default {
 	  {
 		console.log('delete item:' + item)
 		this.item_to_delete = item
+		this.show_delete_dialog = true
 	  },
 	  close_delete()
 	  {
