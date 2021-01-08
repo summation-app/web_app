@@ -71,13 +71,13 @@
       <v-icon
         small
         class="mr-2"
-        @click="this.$emit('edit_item', item)"
+        @click="$emit('edit_item', item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
         small
-        @click="this.$emit('delete_item', item)"
+        @click="$emit('delete_item', item)"
       >
         mdi-delete
       </v-icon>
