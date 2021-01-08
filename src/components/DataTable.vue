@@ -82,13 +82,19 @@
         mdi-delete
       </v-icon>
     </template>
+    <template v-slot:item.enabled="{ item }">
+      <v-switch
+      v-model="item.enabled"
+      @change="$emit('enable_changed', item)"
+      ></v-switch>
+    </template>
     </v-data-table>
   </section>
 </template>
 
 <script>
 export default {
-	props: ['user','token','headers','rows','table_loading','show_expand','table_headers'],
+	props: ['user','token','headers','rows','table_loading','show_expand','table_headers','show_toggle'],
 	data() {
 		return {
           pending_submit: false,

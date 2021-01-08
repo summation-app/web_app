@@ -1,5 +1,11 @@
 <template>
 	<section>
+		<v-alert
+			type="info"
+			outlined
+    	>
+      		To add an approved database query/API request, issue the query/request from a client with your development gateway token.  It will automatically be added to this list.
+    	</v-alert>
 		<v-tabs
 		v-model="selected_tab"
 		grow
@@ -15,13 +21,14 @@
     <v-tabs-items v-model="selected_tab">
 		<v-tab-item key='database_queries'>
 			<h2></h2>
-			<data_table :headers="approved_queries_headers" :rows="approved_queries_rows" :table_loading="table_loading" @delete_item="delete_item"></data_table>
+			<data_table :headers="approved_queries_headers" :rows="approved_queries_rows" :table_loading="table_loading" @enable_changed="enable_changed"></data_table>
 		</v-tab-item>
 		<v-tab-item key='api_requests'>
 			<h2></h2>
-			<data_table :headers="approved_requests_headers" :rows="approved_requests_rows" :table_loading="table_loading" @delete_item="delete_item"></data_table>
+			<data_table :headers="approved_requests_headers" :rows="approved_requests_rows" :table_loading="table_loading" @enable_changed="enable_changed"></data_table>
 		</v-tab-item>
 	</v-tabs-items>
+	<v-btn color="primary" @click="save" :loading="pending_submit">Save</v-btn>
 	</section>
 </template>
 
@@ -41,8 +48,6 @@ export default {
 		  approved_requests_rows: [],
 		  approved_queries_headers: [],
 		  approved_requests_headers: [],
-		  show_delete_dialog: false,
-		  item_to_delete: null,
 		};
 	},
 	mounted: function() 
@@ -76,7 +81,6 @@ export default {
 			{
 				this.approved_requests_headers.push({'text': key, 'value': key})
 			}
-			this.approved_requests_headers.push({ text: 'Actions', value: 'actions', sortable: false });
 		  }
 		  if(response.data.queries.length > 0)
 		  {
@@ -84,11 +88,28 @@ export default {
 			{
 				this.approved_queries_headers.push({'text': key, 'value': key})
 			}
-			this.approved_queries_headers.push({ text: 'Actions', value: 'actions', sortable: false });
 		  }
         }
 		this.table_loading = false
 	  },
+	  async enable_changed(item)
+      {
+		//only enabling/disabling
+        let self = this;
+
+        var params = {
+		  'id': item.id,
+		  'record_type': item.type,
+		  'enabled': item.enabled
+        };
+
+        var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/approved_queries_requests', params);
+        console.log(response);
+        if(response.data!=null && response.data==true)
+        {
+          
+        }
+      },
 	  delete_item(item)
 	  {
 		console.log('delete item:' + item)
