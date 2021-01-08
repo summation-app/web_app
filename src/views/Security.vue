@@ -30,12 +30,13 @@ const axios = require('axios').default;
 import DataTable from "@/components/DataTable.vue";
 
 export default {
-	props: ['user','token','gw'],
+	props: ['user','token','gw','api_prefix'],
 	data() {
 		return {
 		  pending_submit: false,
 		  table_loading: false,
 		  selected_tab: null,
+		  //api_prefix: process.env.VUE_APP_API_PREFIX,
 		  approved_queries_rows: [],
 		  approved_requests_rows: [],
 		  approved_queries_headers: [],
@@ -94,11 +95,14 @@ export default {
 	  async delete_item_confirm()
 	  {
 		let self = this
-        var response = await axios.delete(self.api_prefix + '/approved_queries_requests',
-        {
-		  'id': self.item_to_delete.id,
-		  'type': self.item_to_delete.type
-        })
+		var response = await axios.delete(self.api_prefix + '/approved_queries_requests',
+		{
+			data:
+			{
+			'id': self.item_to_delete.id,
+			'type': self.item_to_delete.type
+			}
+		})
         if(response.data!=null && response.data.length>0)
         {
 			//refresh the list
