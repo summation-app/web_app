@@ -115,7 +115,7 @@ export default {
 		});
 		if(selected_row_index!=-1)
 		{
-			iterable[selected_row_index].loading = true;
+			this.$set(iterable[selected_row_index], 'loading', true)
 		}
 
         var params = {
@@ -132,7 +132,7 @@ export default {
 		}
 		if(selected_row_index!=-1)
 		{
-			delete iterable[selected_row_index].loading;
+			this.$set(iterable[selected_row_index], 'loading', false)
 		}
       },
 	  delete_item(item)
