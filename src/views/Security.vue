@@ -132,7 +132,7 @@ export default {
 		}
 		if(selected_row_index!=-1)
 		{
-			iterable[selected_row_index].loading = null;
+			delete iterable[selected_row_index].loading;
 		}
       },
 	  delete_item(item)
