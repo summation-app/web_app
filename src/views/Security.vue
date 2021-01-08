@@ -28,7 +28,7 @@
 			<data_table :headers="approved_requests_headers" :rows="approved_requests_rows" :table_loading="table_loading" @enable_changed="enable_changed"></data_table>
 		</v-tab-item>
 	</v-tabs-items>
-	<v-btn color="primary" @click="save" :loading="pending_submit">Save</v-btn>
+	
 	</section>
 </template>
 
