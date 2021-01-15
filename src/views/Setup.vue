@@ -7,14 +7,14 @@
             :complete="current_step > 1"
             step="1"
           >
-            User Authentication
+            Connect an API or Database
           </v-stepper-step>
           <v-divider></v-divider>
 
           <v-stepper-step
             :complete="current_step > 2"
             step="2"
-          >Connect your Database or API</v-stepper-step>
+          >User Authentication</v-stepper-step>
 
           <v-stepper-step
             :complete="current_step > 3"
@@ -26,11 +26,11 @@
 
         <v-stepper-items>
           <v-stepper-content step="1">
-            <user_auth :gw="gw" v-on:saved="current_step += 1"></user_auth>
+            <add_api_or_database :gw="gw" v-on:saved="current_step += 1"></add_api_or_database>
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <add_database :gw="gw" v-on:saved="current_step += 1"></add_database>
+            <user_auth :gw="gw" v-on:saved="current_step += 1"></user_auth>            
           </v-stepper-content>
 
           <v-stepper-content step="3">
@@ -43,8 +43,7 @@
 
 <script>
 import UserAuth from "@/components/UserAuth.vue"
-import AddAPI from "@/components/AddAPI.vue";
-import AddDatabase from "@/components/AddDatabase.vue";
+import AddAPIOrDatabase from "@/components/AddAPIOrDatabase.vue";
 import ClientSetup from "@/components/ClientSetup.vue";
 const axios = require('axios').default;
 
@@ -63,8 +62,7 @@ export default {
     },
     components: {
       'user_auth': UserAuth,
-      'add_api': AddAPI,
-      'add_database': AddDatabase,
+      'add_api_or_database': AddAPIOrDatabase,
       'client_setup': ClientSetup,
     },
     mounted: function() 

@@ -91,6 +91,11 @@
 					max-width="344"
 					outlined
 				>
+				<v-img
+				src="@/assets/images/firebase.png"
+				height="200px"
+				class="rounded_card"
+				></v-img>
 				<v-card-title>Firebase</v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
@@ -111,6 +116,11 @@
 					max-width="344"
 					outlined
 				>
+				<v-img
+				src="@/assets/images/aws_cognito.png"
+				height="200px"
+				class="rounded_card"
+				></v-img>
 				<v-card-title>AWS Cognito</v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
@@ -133,6 +143,11 @@
 					max-width="344"
 					outlined
 				>
+				<v-img
+				src="@/assets/images/auth0.png"
+				height="200px"
+				class="rounded_card"
+				></v-img>
 				<v-card-title>Auth0</v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
@@ -153,6 +168,11 @@
 					max-width="344"
 					outlined
 				>
+				<v-img
+				src="@/assets/images/okta.png"
+				height="200px"
+				class="rounded_card"
+				></v-img>
 				<v-card-title>Okta</v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
