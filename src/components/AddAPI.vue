@@ -52,6 +52,7 @@
 				<v-row>
 					<v-col>
 						<v-text-field
+						v-if="show_url"
 						v-model="url"
 						label="URL prefix (like https://api.stripe.com)"
 						required
@@ -76,6 +77,7 @@
 								outlined
 								></v-text-field>
 								<v-text-field
+								v-if="show_development_api_key"
 								v-model="development_key"
 								label="Development Key (Optional)"
 								outlined
@@ -91,17 +93,20 @@
 							See examples <a href='https://docs.summation.app/quick-start/adding-an-api#basic-auth'>here</a>.
 							<br/>
 							<v-text-field
+							v-if="show_basic_auth_username"
 							v-model="basic_auth.username"
-							label="Username"
+							label="basic_auth_username_title"
 							required
 							outlined
 							></v-text-field>
 							<v-text-field
+							v-if="show_basic_auth_password_production"
 							v-model="basic_auth.password_production"
-							label="Password (Production)"
+							label="basic_auth_password_title"
 							outlined
 							></v-text-field>
 							<v-text-field
+							v-if="show_basic_auth_password_development"
 							v-model="basic_auth.password_development"
 							label="Password (Development - Optional)"
 							outlined
@@ -118,6 +123,7 @@
 							outlined
 							></v-text-field>
 							<v-text-field
+							v-if="show_development_api_key"
 							v-model="bearer_token.development"
 							label="Bearer Token (Development - Optional)"
 							outlined
@@ -148,20 +154,20 @@ export default {
 				{'name': 'twilio', 'logo': "twilio.png"},
 				{'name': 'mailchimp', 'logo': "mailchimp.png"},
 				{'name': 'shopify', 'logo': "shopify.png"},
-				{'name': 'youtube', 'logo': "youtube.png"},
-				{'name': 'google_sheets', 'logo': "google_sheets.png"},
 				{'name': 'airtable', 'logo': "airtable.png"},
-				{'name': 'slack', 'logo': "slack.png"},
+				{'name': 'zendesk', 'logo': "zendesk.png"},
+				{'name': 'sendgrid', 'logo': "sendgrid.png"},
+				{'name': 'easypost', 'logo': "easypost.png"},
 			],
 			api_library_auth_methods: {
-				'stripe': 'API Key in Headers',
-				'twilio': null,
-				'mailchimp': null,
-				'shopify': null,
-				'youtube': null,
-				'google_sheets': null,
-				'airtable': null,
-				'slack': null
+				'stripe': {'method': 'Basic Auth', 'url': 'https://api.stripe.com', 'require_username': true, 'require_password': false, 'username_title': 'API key', 'prompt_for_development_token': true},
+				'twilio': {'method': 'Basic Auth', 'url': 'https://api.twilio.com', 'require_username': true, 'require_password': true, 'username_title': 'Account SID', 'password_title': 'Auth Token'},
+				'mailchimp': {'method': 'Basic Auth', 'url': 'https://DC.api.mailchimp.com', 'require_username': false, 'require_password': true, 'password_title': 'API key', 'prompt_for_url': true},
+				'shopify': {'method': 'API Key in Headers', 'url': 'https://STORE_NAME.myshopify.com', 'header_key': 'X-Shopify-Access-Token', 'prompt_for_url': true},
+				'airtable': {'method': 'Bearer Token', 'url': 'https://api.airtable.com'},
+				'zendesk': {'method': 'Basic Auth', 'url': 'https://SUBDOMAIN.zendesk.com/api', 'require_username': true, 'require_password': true, 'username_title': 'email address', 'prompt_for_development_token': false, 'append_to_username': '/token'},
+				'sendgrid': {'method': 'Bearer Token', 'url': 'https://api.sendgrid.com'},
+				'easypost': {'method': 'Basic Auth', 'url': 'https://api.easypost.com', 'require_username': true, 'require_password': false, 'username_title': 'API key', 'prompt_for_development_token': true},
 			},
 			methods: ['GET','POST','DELETE','PUT','PATCH'],
 			auth_method: null,
@@ -169,10 +175,18 @@ export default {
 			url: null,
 			production_key: null,
 			development_key: null,
+			show_url: true,
+			show_development_api_key: false,
+			show_basic_auth_username: true,
+			show_basic_auth_password_production: true,
+			show_basic_auth_password_development: false,
+			basic_auth_username_title: 'Username',
+			basic_auth_password_title: 'Password',
 			bearer_token: {'production': null, 'development': null},
 			basic_auth: {'username': null, 'password_production': null, 'password_development': null},
 			body: null,
 			header_key: null,
+			append_to_basic_auth_username: '',
 			header_remove_index: null
 		};
 	},
@@ -196,11 +210,63 @@ export default {
 	  add_library_api(name)
 	  {
 		  console.log(name)
-		var api_auth_method = this.api_library_auth_methods[name]
-		if(api_auth_method!=null)
+		var api_auth = this.api_library_auth_methods[name]
+		if(api_auth!=null)
 		{
 			this.library_api_name = name;
 			this.adding_library_api = true;
+			this.auth_method = api_auth.method;
+			this.show_url = false;
+			if(this.auth_method=='Basic Auth')
+			{
+				this.show_basic_auth_username = false;
+				this.show_basic_auth_password_production = false;
+				this.show_basic_auth_password_development = false;
+				if(api_auth.require_username==true)
+				{
+					this.show_basic_auth_username = true;
+					if(api_auth.username_title!=undefined)
+					{
+						this.basic_auth_username_title = api_auth.username_title
+					}
+				}
+				if(api_auth.require_password==true)
+				{
+					this.show_basic_auth_password_production = true;
+					if(api_auth.password_title!=undefined)
+					{
+						this.basic_auth_password_title = api_auth.password_title
+					}
+				}
+				if(api_auth.prompt_for_development_token==true)
+				{
+					this.show_basic_auth_password_development = true;
+				}
+			}
+			else if(this.auth_method=='API Key in Headers')
+			{
+				this.header_key = api_auth.header_key;
+				if(api_auth.prompt_for_development_token==true)
+				{
+					this.show_development_api_key = true;
+				}
+			}
+			else if(this.auth_method=='Bearer Token')
+			{
+				if(api_auth.prompt_for_development_token==true)
+				{
+					this.show_development_api_key = true;
+				}
+			}
+			this.url = api_auth.url;
+			if (api_auth.prompt_for_url==true)
+			{
+				this.show_url = true
+			}
+			if(api_auth.append_to_username)
+			{
+				this.append_to_basic_auth_username = api_auth.data.append_to_username
+			}
 		}
 	  },
 	  get_image_url(pic)
@@ -220,6 +286,11 @@ export default {
 	  {
 		this.pending_submit = true
 		let self = this;
+
+		if(self.append_to_basic_auth_username!='')
+		{
+			self.basic_auth.username = self.basic_auth.username + self.append_to_basic_auth_username
+		}
 
 		var params = {
 		  'url': self.url,
