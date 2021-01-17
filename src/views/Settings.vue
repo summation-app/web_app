@@ -10,6 +10,9 @@
       <v-tab key='integrations'>
         Integrations
       </v-tab>
+      <v-tab key='apps'>
+        Apps
+      </v-tab>
       <!--<v-tab key='subscription_plan'>
         Subscription Plan
       </v-tab>-->
@@ -224,6 +227,78 @@
           </div>
         <v-btn type='submit' :loading="logging_loading" color='success' @click='save_logging'>Save</v-btn>
       </v-tab-item>
+      <v-tab-item key='apps'>
+        <h2>Apps</h2>
+        <router-link to="/setup/2"><v-btn id='add_button' color='success'>Create New App</v-btn></router-link>
+        <data_table :headers="apps_headers" :rows="apps_rows" :table_loading="table_loading" @enable_changed="enable_changed"></data_table>
+        <v-dialog
+          v-model="show_edit_dialog"
+          max-width="500px"
+        >
+          <v-card>
+            <v-card-title>
+              <span class="headline">Edit Item</span>
+            </v-card-title>
+
+            <v-text-field
+              v-model="edited_item.name"
+              label="App name"
+              required
+              outlined
+            ></v-text-field>
+
+            <v-select
+              v-model="edited_item.enabled_databases"
+              :items="all_databases"
+              label="Enabled databases"
+              multiple
+              chips
+              hint=""
+              persistent-hint
+            ></v-select>
+
+            <v-select
+              v-model="edited_item.enabled_apis"
+              :items="all_apis"
+              label="Enabled APIs"
+              multiple
+              chips
+              hint=""
+              persistent-hint
+            ></v-select>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="close_item_editor"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                color="blue darken-1"
+                text
+                :loading="save_app_loading"
+                @click="save_app"
+              >
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="show_delete_dialog" max-width="500px">
+          <v-card>
+            <v-card-title class="headline">Are you sure you want to delete this item?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close_delete">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="delete_item_confirm">OK</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-tab-item>
     </v-tabs-items>
   </section>
 </template>
@@ -239,6 +314,10 @@ export default {
     selected_tab: null,
     selected_app: null,
     selected_role: null,
+    apps_headers: [],
+    apps_rows: [],
+    all_databases: [],
+    all_apis: [],
     api_prefix: process.env.VUE_APP_API_PREFIX,
     logging_loading: false,
     logging_credentials: {
@@ -296,14 +375,15 @@ export default {
     show_alert: false,
     integrations_loading: false,
     access_controls_saving: false,
+    show_edit_dialog: false,
+		show_delete_dialog: false,
+		item_to_delete: null,
+    edited_item: {},
+    save_app_loading: false,
     }
   },
   components: {
     'data_table': DataTable,
-  },
-  created: function()
-  {
-    
   },
   mounted: function()
   {
@@ -328,6 +408,88 @@ export default {
   watch: {
   },
   methods: {
+    async get_apps()
+    {
+      this.pending_submit = true
+      this.table_loading = true
+      let self = this
+      var response = await axios.get(self.api_prefix + '/apps')
+      if(response.data!=null)
+      {
+        this.apps_rows = response.data;
+
+        if(response.data.length > 0)
+        {
+          for (const [key, value] of Object.entries(response.data[0])) 
+          {
+            this.apps_headers.push({'text': key, 'value': key})
+          }
+          this.apps_headers.push({ text: 'Actions', value: 'actions', sortable: false });
+        }
+      }
+		  this.table_loading = false
+    },
+    async save_app()
+    {
+      this.save_app_loading = true;
+      let self = this;
+      var response = await axios.post(this.api_prefix + '/apps',
+      {
+        'id': self.edited_item.id,
+        'update_record': true,
+        'name': self.edited_item.name,
+        'enabled_databases': self.edited_item.enabled_databases,
+        'enabled_apis': self.edited_item.enabled_apis
+      });
+      this.save_app_loading = false;
+      await this.get_apps()
+    },
+    close_item_editor()
+	  {
+		this.show_edit_dialog = false
+	  },
+	  edit_item(item)
+	  {
+      console.log('edit item:' + item)
+      this.edited_item = item
+
+      //get list of all databases & APIs
+      var response = await axios.get(self.api_prefix + '/all_databases_apis')
+      if(response.data!=null)
+      {
+        this.all_databases = response.data.databases;
+        this.all_apis = response.data.apis;
+      }
+
+      this.show_edit_dialog = true
+	  },
+	  delete_item(item)
+	  {
+      console.log('delete item:' + item)
+      this.item_to_delete = item
+      this.show_delete_dialog = true
+    },
+    close_delete()
+    {
+    this.show_delete_dialog = false;
+    },
+    async delete_item_confirm()
+    {
+      let self = this
+      var response = await axios.delete(self.api_prefix + '/apps',
+      { 
+        data: 
+        {
+          'id': self.item_to_delete.id
+        }
+      });
+      if(response.data!=null && response.data.status==true)
+      {
+        //refresh the list
+        await self.get_apps()
+      }
+      this.show_delete_dialog = false;
+    },
     async save_integrations()
     {
 
@@ -357,10 +519,53 @@ export default {
         'logging_config': self.logging_credentials
       });
       this.access_controls_saving = false;
-    }
-  }
+    },
+    async enable_changed(item)
+      {
+        //only enabling/disabling
+        let self = this;
+        var selected_row_index = -1;
+        
+        this.apps_rows.forEach(function (value, i) 
+        {
+            if(value.id==item.id)
+          {
+            selected_row_index = i
+          }
+        });
+        if(selected_row_index!=-1)
+        {
+          this.$set(this.apps_rows[selected_row_index], 'loading', true)
+        }
+
+        var params = {
+          'id': item.id,
+          'enabled': item.enabled
+        };
+
+        var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/apps', params);
+        console.log(response);
+        if(response.data!=null && response.data==true)
+        {
+          
+        }
+        if(selected_row_index!=-1)
+        {
+          this.$set(this.apps_rows[selected_row_index], 'loading', false)
+        }
+      },
+  },
+  async created() 
+	{
+		await this.get_apps()
+	}
 }
 </script>
 
 <style scoped>
+#add_button
+{
+	float: right;
+	margin: 10px;
+}
 </style>

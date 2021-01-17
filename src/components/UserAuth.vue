@@ -1,6 +1,6 @@
 <template>
   <section>
-	<h2>How do you Authenticate Users?</h2> 
+	<h2>How should we authenticate users?</h2> 
 	<v-container>
 		<v-row v-if="selected_auth_method==null">
 			<v-col>
@@ -9,8 +9,28 @@
 					max-width="344"
 					outlined
 				>
+				<v-card-title>No Authentication</v-card-title>
+				<v-card-text>Use only for testing or public resources</v-card-text>
+				<v-card-actions>
+					<v-btn
+						outlined
+						rounded
+						text
+						@click="selected_auth_method='none'"
+					>
+						Select
+					</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-col>
+			<v-col>
+				<v-card
+					class="mx-auto"
+					max-width="344"
+					outlined
+				>
 				<v-card-title>JSON Web Tokens (JWT)</v-card-title>
-				<v-card-text>Including Firebase, Auth0, Cognito, & Okta</v-card-text>
+				<v-card-text>Including Firebase, AWS Cognito, Okta, & Auth0</v-card-text>
 				<v-card-actions>
 					<v-btn
 						outlined
@@ -39,26 +59,6 @@
 						@click="selected_auth_method='session'"
 					>
 						Select
-					</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-col>
-			<v-col>
-				<v-card
-					class="mx-auto"
-					max-width="344"
-					outlined
-				>
-				<v-card-title>Not Sure?</v-card-title>
-				<v-card-text></v-card-text>
-				<v-card-actions>
-					<v-btn
-						outlined
-						rounded
-						text
-						@click="selected_auth_method='not_sure'"
-					>
-						Click Here
 					</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -267,7 +267,7 @@
 <script>
 const axios = require('axios').default;
 export default {
-	props: ['user','token','gw'],//'api_prefix'
+	props: ['user','token','gw','app_id'],//'api_prefix'
 	data() {
 		return {
 			pending_submit: false,
@@ -320,20 +320,26 @@ export default {
 	  {
 		try
 		{
-			this.pending_submit = true
-			let self = this;
-			var all_values = {'selected_auth_method': this.selected_auth_method, 'selected_jwt_method': this.selected_jwt_method, 'jwt_parameters': this.jwt_parameters, 'role_search_path': this.role_search_path}
-			var response = await axios.post(self.api_prefix + '/auth_method',
+			if(this.app_id!=null)//editing an app, not creating a new one
 			{
-				'token': self.token,
-				'values': all_values
-			})
-			if(response.data!=null)
-			{
+				this.pending_submit = true
+				let self = this;
+				var all_values = {'selected_auth_method': this.selected_auth_method, 'selected_jwt_method': this.selected_jwt_method, 'jwt_parameters': this.jwt_parameters, 'role_search_path': this.role_search_path}
+				var response = await axios.post(self.api_prefix + '/auth_method',
+				{
+					'values': all_values
+				})
+				if(response.data!=null)
+				{
 
+				}
+				this.pending_submit = false
+				this.$emit('saved', self.token, all_values)
 			}
-			this.pending_submit = false
-			this.$emit('saved')
+			else
+			{
+				this.$emit('saved')
+			}
 		}
 		catch (error)
 		{

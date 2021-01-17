@@ -30,11 +30,11 @@
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <user_auth :gw="gw" v-on:saved="current_step += 1"></user_auth>            
+            <user_auth :gw="gw" v-on:saved="saved_user_auth"></user_auth>            
           </v-stepper-content>
 
           <v-stepper-content step="3">
-            <client_setup :gw="gw"></client_setup>
+            <client_setup :gw="gw" v-on:saved="save_auth_with_app_id"></client_setup>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -58,6 +58,8 @@ export default {
           api_key: null,
           loading: false,
           saved: false,
+          token: null,
+          auth_values: null
         };
     },
     components: {
@@ -103,6 +105,21 @@ export default {
           console.error(error);
         }
       },
+      saved_user_auth(token, values)
+      {
+        let self = this;
+        this.current_step += 1
+        self.token = token
+        self.auth_values = values
+      },
+      async save_auth_with_app_id(app_id)
+      {
+        var response = await axios.post(self.api_prefix + '/auth_method',
+				{
+          'values': self.auth_values,
+          'app_id': app_id
+				})
+      }
     },
     created()
     {

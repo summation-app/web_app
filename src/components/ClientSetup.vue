@@ -7,10 +7,13 @@
 			label="App Name"
 			required>
 		</v-text-field>
-		<v-btn color="primary" @click="generate_gateway_keys()" :loading="pending_submit">Generate Keys</v-btn>
+		<v-btn color="primary" @click="generate_gateway_keys()" :loading="pending_submit">Generate Client Tokens</v-btn>
 		<br/>
 		<br/>
 		<div v-if="show_instructions">
+			<v-text-field v-model="dev_key" readonly label="Development Key">
+			<v-text-field v-model="prod_key" readonly label="Production Key">
+			<br/>
 			<div>Please select a language to see the setup instructions:</div>
 			<v-tabs
 			v-model="selected_tab"
@@ -137,6 +140,8 @@ export default {
 		  app_name: null,
 		  selected_tab: 0,
 		  selected_panel: ['1'],
+		  dev_key: null,
+		  prod_key: null,
 		  show_instructions: false
 		};
 	},
@@ -162,9 +167,12 @@ export default {
 		});
 		this.dev_key = response.data.dev_key
 		this.prod_key = response.data.prod_key
+		this.app_id = response.data.app_id
 		
 		this.pending_submit = false;
 		this.show_instructions = true;
+
+		this.$emit('saved', this.app_id)
 	  }
 	},
 	components: {
