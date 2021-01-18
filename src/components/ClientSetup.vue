@@ -16,8 +16,8 @@
 		<br/>
 		<br/>
 		<div v-if="show_instructions">
-			<v-text-field v-model="dev_key" readonly label="Development Key">
-			<v-text-field v-model="prod_key" readonly label="Production Key">
+			<v-text-field v-model="dev_key" readonly label="Development Key"></v-text-field>
+			<v-text-field v-model="prod_key" readonly label="Production Key"></v-text-field>
 			<br/>
 			<div>Please select a language to see the setup instructions:</div>
 			<v-tabs
