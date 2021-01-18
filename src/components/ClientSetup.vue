@@ -7,6 +7,11 @@
 			label="App Name"
 			required>
 		</v-text-field>
+		<v-switch
+			v-model="enable_all_data_sources_for_app"
+			label="Enable all existing APIs/databases for this app"
+		></v-switch>
+		<br/>
 		<v-btn color="primary" @click="generate_gateway_keys()" :loading="pending_submit">Generate Client Tokens</v-btn>
 		<br/>
 		<br/>
@@ -140,6 +145,7 @@ export default {
 		  app_name: null,
 		  selected_tab: 0,
 		  selected_panel: ['1'],
+		  enable_all_data_sources_for_app: true,
 		  dev_key: null,
 		  prod_key: null,
 		  show_instructions: false
@@ -163,7 +169,8 @@ export default {
 		var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/generate_gateway_tokens_for_new_app',
 		{
 			'token': localStorage.getItem('token'),
-			'app_name': this.app_name
+			'app_name': this.app_name,
+			'enable_all_data_sources_for_app': this.enable_all_data_sources_for_app
 		});
 		this.dev_key = response.data.dev_key
 		this.prod_key = response.data.prod_key

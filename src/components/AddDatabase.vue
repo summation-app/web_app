@@ -46,6 +46,12 @@
       outlined
     ></v-text-field>
     <br/>
+    <v-switch
+			v-if="existing_apps"
+			v-model="enable_data_source_for_all_existing_apps"
+			label="Enable this database for all your existing apps in Summation"
+    ></v-switch>
+    <br/>
     <v-btn color="primary" @click="save_database" :loading="pending_submit">Save</v-btn>
     <br/>
     <br/>
@@ -86,13 +92,15 @@ export default {
           password: null,
           name: null,
           database_name: null,
-          schema: null
+          schema: null,
+          enable_data_source_for_all_existing_apps: true,
+          existing_apps: false
 		};
 	},
 	mounted: function() 
-    {
-      
-    },
+	{
+		this.get_apps()
+	},
 	watch: {
     item: function(val)
     {
@@ -106,6 +114,14 @@ export default {
 		
 	},
 	methods: {
+    	async get_apps()
+      {
+        var response = await axios.get(self.api_prefix + '/apps')
+        if(response.data!=null && response.data.length> 0)
+        {
+          this.existing_apps = true;
+        }
+      },
       copy_item_values()
       {
         //we're editing an existing connection
@@ -131,7 +147,8 @@ export default {
           'password': this.password,
           'database_name': this.database_name,
           'schema': this.schema,
-          'name': this.name
+          'name': this.name,
+          'enable_data_source_for_all_existing_apps': self.enable_data_source_for_all_existing_apps,
         };
 
         if(this.item==null)

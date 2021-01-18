@@ -133,6 +133,11 @@
 				</v-row>
 			</v-container>
 		</v-row>
+		<v-switch
+			v-if="existing_apps"
+			v-model="enable_data_source_for_all_existing_apps"
+			label="Enable this API for all your existing apps in Summation"
+      	></v-switch>
 		<v-btn color="primary" @click="save_api" :loading="pending_submit">Save</v-btn>
 	</v-container>
   </section>
@@ -180,6 +185,8 @@ export default {
 			show_basic_auth_username: true,
 			show_basic_auth_password_production: true,
 			show_basic_auth_password_development: false,
+			enable_data_source_for_all_existing_apps: true,
+			existing_apps: false,
 			basic_auth_username_title: 'Username',
 			basic_auth_password_title: 'Password',
 			bearer_token: {'production': null, 'development': null},
@@ -192,7 +199,7 @@ export default {
 	},
 	mounted: function() 
 	{
-		
+		this.get_apps()
 	},
 	watch: {
 		item: function(val)
@@ -207,6 +214,14 @@ export default {
 		
 	},
 	methods: {
+	  async get_apps()
+	  {
+		var response = await axios.get(self.api_prefix + '/apps')
+		if(response.data!=null && response.data.length> 0)
+		{
+			this.existing_apps = true;
+		}
+	  },
 	  add_library_api(name)
 	  {
 		  console.log(name)
@@ -301,7 +316,8 @@ export default {
 		  'authentication': {'auth_method': self.auth_method},
 		  'bearer_token': self.bearer_token,
 		  'basic_auth': self.basic_auth,
-		  'method': self.method
+		  'method': self.method,
+		  'enable_data_source_for_all_existing_apps': self.enable_data_source_for_all_existing_apps,
         };
 
 		if(this.item==null)
