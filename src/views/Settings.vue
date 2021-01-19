@@ -240,33 +240,6 @@
               <span class="headline">Edit Item</span>
             </v-card-title>
 
-            <v-text-field
-              v-model="edited_item.name"
-              label="App name"
-              required
-              outlined
-            ></v-text-field>
-
-            <v-select
-              v-model="edited_item.enabled_databases"
-              :items="all_databases"
-              label="Enabled databases"
-              multiple
-              chips
-              hint=""
-              persistent-hint
-            ></v-select>
-
-            <v-select
-              v-model="edited_item.enabled_apis"
-              :items="all_apis"
-              label="Enabled APIs"
-              multiple
-              chips
-              hint=""
-              persistent-hint
-            ></v-select>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
