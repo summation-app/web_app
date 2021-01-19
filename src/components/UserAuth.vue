@@ -94,9 +94,10 @@
 				<v-img
 				src="@/assets/images/firebase.png"
 				height="200px"
+				contain
 				class="rounded_card"
 				></v-img>
-				<v-card-title>Firebase</v-card-title>
+				<v-card-title></v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
 					<v-btn
@@ -119,6 +120,7 @@
 				<v-img
 				src="@/assets/images/aws_cognito.png"
 				height="200px"
+				contain
 				class="rounded_card"
 				></v-img>
 				<v-card-title>AWS Cognito</v-card-title>
@@ -148,7 +150,7 @@
 				height="200px"
 				class="rounded_card"
 				></v-img>
-				<v-card-title>Auth0</v-card-title>
+				<v-card-title></v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
 					<v-btn
@@ -173,7 +175,7 @@
 				height="200px"
 				class="rounded_card"
 				></v-img>
-				<v-card-title>Okta</v-card-title>
+				<v-card-title></v-card-title>
 				<v-card-text></v-card-text>
 				<v-card-actions>
 					<v-btn
@@ -202,12 +204,14 @@
 			label="Region"
 			required>
 			</v-text-field>
+			<br/>
 			<v-text-field
 			v-model="jwt_parameters.user_pool_id"
 			:counter="256"
 			label="User Pool ID"
 			required>
 			</v-text-field>
+			<br/>
 			<v-text-field
 			v-model="jwt_parameters.client_id"
 			:counter="256"
@@ -222,6 +226,7 @@
 			label="Domain"
 			required>
 			</v-text-field>
+			<br/>
 			<v-text-field
 			v-model="jwt_parameters.client_id"
 			:counter="256"
@@ -236,6 +241,7 @@
 			label="Domain"
 			required>
 			</v-text-field>
+			<br/>
 			<v-text-field
 			v-model="jwt_parameters.client_id"
 			:counter="256"

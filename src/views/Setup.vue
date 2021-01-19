@@ -58,7 +58,6 @@ export default {
           api_key: null,
           loading: false,
           saved: false,
-          token: null,
           auth_values: null
         };
     },
