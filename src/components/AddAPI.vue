@@ -1,6 +1,12 @@
 <template>
   <section>
-	<h2>Add a 3rd Party API</h2> 
+	<h2>Add a 3rd Party API</h2>
+	<v-alert
+      v-if="show_alert"
+      :type="alert_type"
+    >
+      {{ alert_text }}
+    </v-alert>
 	<v-container>
 		<v-row>
 			<h3>Add an API from our Library</h3>
@@ -195,7 +201,10 @@ export default {
 			body: null,
 			header_key: null,
 			append_to_basic_auth_username: '',
-			header_remove_index: null
+			header_remove_index: null,
+			show_alert: false,
+			alert_type: 'success',
+			alert_text: null,
 		};
 	},
 	mounted: function() 
@@ -225,7 +234,6 @@ export default {
 	  },
 	  add_library_api(name)
 	  {
-		  console.log(name)
 		var api_auth = this.api_library_auth_methods[name]
 		if(api_auth!=null)
 		{
@@ -336,6 +344,19 @@ export default {
 		console.log(response);
 		this.pending_submit = false
 		this.$emit('saved')
+
+		if(response.data.status==true)
+		{
+			self.alert_text = "Your API was saved succesfully."
+			self.alert_type = 'success'
+			self.show_alert = true;
+		}
+		else
+		{
+			self.alert_text = "We were unable to add your API - please check the error logs, or reach out for help."
+			self.alert_type = 'error'
+			self.show_alert = true;
+		}
 	  },
 	},
 	components: {
