@@ -295,6 +295,29 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="show_gateway_tokens_dialog" max-width="500px">
+          <v-card>
+            <v-card-title class="headline">Gateway Tokens</v-card-title>
+            <v-textarea
+              name="development_token"
+              label="Development Gateway Token"
+              v-model="shown_gateway_token.gateway_token_development"
+              readonly>
+              </v-textarea>
+              <br/>
+              <v-textarea
+              name="development_token"
+              label="Production Gateway Token"
+              v-model="shown_gateway_token.gateway_token_production"
+              readonly>
+              </v-textarea>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close_show_gateway_tokens">OK</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-tab-item>
     </v-tabs-items>
   </section>
@@ -379,6 +402,8 @@ export default {
 		item_to_delete: null,
     edited_item: {},
     save_app_loading: false,
+    show_gateway_tokens_dialog: false,
+    shown_gateway_token: null,
     }
   },
   components: {
@@ -466,7 +491,16 @@ export default {
       }
 
       this.show_edit_dialog = true
-	  },
+    },
+    display_gateway_tokens(item)
+	  {
+      this.shown_gateway_token = item
+      this.show_gateway_tokens_dialog = true;
+    },
+    close_show_gateway_tokens()
+	  {
+		  this.show_gateway_tokens_dialog = false
+    },
 	  delete_item(item)
 	  {
       console.log('delete item:' + item)
