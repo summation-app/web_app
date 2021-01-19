@@ -230,7 +230,7 @@
       <v-tab-item key='apps'>
         <h2>Apps</h2>
         <router-link to="/setup/2"><v-btn id='add_button' color='success'>Create New App</v-btn></router-link>
-        <data_table :headers="apps_headers" :rows="apps_rows" :table_loading="table_loading" @enable_changed="enable_changed"></data_table>
+        <data_table :headers="apps_headers" :rows="apps_rows" :table_loading="table_loading" @enable_changed="enable_changed" @edit_item="edit_item" @delete_item="delete_item"></data_table>
         <v-dialog
           v-model="show_edit_dialog"
           max-width="500px"
@@ -239,6 +239,30 @@
             <v-card-title>
               <span class="headline">Edit Item</span>
             </v-card-title>
+
+            <v-text-field
+            v-model="edited_item.name"
+            label="App name"
+            required
+            outlined
+            ></v-text-field>
+
+            <v-select
+              v-model="edited_item.enabled_databases"
+              :items="all_databases"
+              label="Approved Databases this App can Access"
+              multiple
+              hint=""
+              persistent-hint
+            ></v-select>
+            <v-select
+              v-model="edited_item.enabled_apis"
+              :items="all_apis"
+              label="Approved APIs this App can Access"
+              multiple
+              hint=""
+              persistent-hint
+            ></v-select>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -348,6 +372,8 @@ export default {
     show_alert: false,
     integrations_loading: false,
     access_controls_saving: false,
+    all_apis: [],
+    all_databases: [],
     show_edit_dialog: false,
 		show_delete_dialog: false,
 		item_to_delete: null,
@@ -365,11 +391,11 @@ export default {
     var tab = this.$route.params.tab;
     if(tab!=null)
     {
-      if(tab=="access_controls")
+      if(tab=="integrations")
       {
         this.selected_tab = 0;
       }
-      else if(tab=="integrations")
+      else if(tab=="apps")
       {
         this.selected_tab = 1;
       }
@@ -385,6 +411,7 @@ export default {
     {
       this.pending_submit = true
       this.table_loading = true
+      this.apps_headers = []
       let self = this
       var response = await axios.get(self.api_prefix + '/apps')
       if(response.data!=null)
@@ -415,6 +442,10 @@ export default {
         'enabled_apis': self.edited_item.enabled_apis
       });
       this.save_app_loading = false;
+      if(response.data!=null && response.data==true)
+      {
+        this.close_item_editor()
+      }
       await this.get_apps()
     },
     close_item_editor()

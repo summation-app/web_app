@@ -89,6 +89,12 @@
       :loading="item.loading"
       ></v-switch>
     </template>
+    <template v-slot:item.gateway_token_production="{ item }">
+      <span @click="$emit('display_gateway_tokens', item)">Click to Show</span>
+    </template>
+    <template v-slot:item.gateway_token_development="{ item }">
+      <span @click="$emit('display_gateway_tokens', item)">Click to Show</span>
+    </template>
     </v-data-table>
   </section>
 </template>
