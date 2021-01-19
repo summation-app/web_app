@@ -66,6 +66,7 @@ export default {
 	props: ['user','token','gw','item'],
 	data() {
 		return {
+          api_prefix: process.env.VUE_APP_API_PREFIX,
           pending_submit: false,
           show_alert: false,
           alert_type: 'success',
@@ -116,7 +117,7 @@ export default {
 	methods: {
     	async get_apps()
       {
-        var response = await axios.get(self.api_prefix + '/apps')
+        var response = await axios.get(this.api_prefix + '/apps')
         if(response.data!=null && response.data.length> 0)
         {
           this.existing_apps = true;
