@@ -288,7 +288,10 @@ export default {
 	},
 	mounted: function() 
     {
-
+		if(process.env.VUE_APP_ENV=='cloud')
+		{
+			window.analytics.page('User Auth');
+		}
     },
 	watch: {
 		
@@ -341,6 +344,13 @@ export default {
 				}
 				this.pending_submit = false
 				this.$emit('saved', self.token, all_values)
+
+				if(process.env.VUE_APP_ENV=='cloud')
+				{
+					window.analytics.track("User Auth Saved", {
+						
+					});
+				}
 			}
 			else
 			{

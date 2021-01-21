@@ -171,12 +171,27 @@ export default {
             self.alert_text = "We were able to connect to your database!"
             self.alert_type = 'success'
             self.show_alert = true;
+
+            if(process.env.VUE_APP_ENV=='cloud')
+            {
+              window.analytics.track("Database Saved", {
+                'database_type': self.database_type,
+                'succesful_connection': true,
+              });
+            }
           }
           else
           {
             self.alert_text = "We were unable to connect to your database - please check your credentials or click here for help."
             self.alert_type = 'error'
             self.show_alert = true;
+            if(process.env.VUE_APP_ENV=='cloud')
+            {
+              window.analytics.track("Database Saved", {
+                'database_type': self.database_type,
+                'succesful_connection': false,
+              });
+            }
           }
         }
         this.pending_submit = false
@@ -189,6 +204,10 @@ export default {
     {
       this.copy_item_values()
     }
+    if(process.env.VUE_APP_ENV=='cloud')
+		{
+			window.analytics.page('Add Database');
+		}
 	}
 };
 </script>

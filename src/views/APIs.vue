@@ -140,6 +140,10 @@ export default {
 	async created() 
 	{
     await this.get_APIs()
+    if(process.env.VUE_APP_ENV=='cloud')
+    {
+      window.analytics.page('APIs');
+    }
 	}
 };
 </script>

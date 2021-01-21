@@ -153,7 +153,10 @@ export default {
 	},
 	mounted: function() 
 	{
-	  
+	  	if(process.env.VUE_APP_ENV=='cloud')
+		{
+			window.analytics.page('Client Setup');
+		}
 	},
 	watch: {
 

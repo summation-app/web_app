@@ -350,12 +350,24 @@ export default {
 			self.alert_text = "Your API was saved succesfully."
 			self.alert_type = 'success'
 			self.show_alert = true;
+			if(process.env.VUE_APP_ENV=='cloud')
+            {
+              window.analytics.track("API Saved", {
+                'succesful_connection': true,
+              });
+            }
 		}
 		else
 		{
 			self.alert_text = "We were unable to add your API - please check the error logs, or reach out for help."
 			self.alert_type = 'error'
 			self.show_alert = true;
+			if(process.env.VUE_APP_ENV=='cloud')
+            {
+              window.analytics.track("API Saved", {
+                'succesful_connection': false,
+              });
+            }
 		}
 	  },
 	},
@@ -367,6 +379,10 @@ export default {
 		if(this.item!=null)
 		{
 			this.copy_item_values()
+		}
+		if(process.env.VUE_APP_ENV=='cloud')
+		{
+			window.analytics.page('Add API');
 		}
 	}
 };

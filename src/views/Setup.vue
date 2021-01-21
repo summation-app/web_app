@@ -76,6 +76,11 @@ export default {
       }
 
       this.is_mobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
+
+      if(process.env.VUE_APP_ENV=='cloud')
+      {
+        window.analytics.page('Setup');
+      }
     },
     computed: {
       

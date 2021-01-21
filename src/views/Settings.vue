@@ -403,7 +403,7 @@ export default {
     edited_item: {},
     save_app_loading: false,
     show_gateway_tokens_dialog: false,
-    shown_gateway_token: null,
+    shown_gateway_token: {},
     }
   },
   components: {

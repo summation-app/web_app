@@ -160,10 +160,6 @@ export default {
         let self = this;
 
         this.initialize_gateway();
-        if(process.env.VUE_APP_ENV=='cloud')
-        {
-          self.firebase_token()
-        }
 
         //leverage Axios interceptors to append the token to every request
         axios.interceptors.request.use(async config => {
