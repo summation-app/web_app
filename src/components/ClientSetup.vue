@@ -60,6 +60,8 @@ default_database: "YOUR_DATABASE_NAME"
 </pre>
 				</vue-code-highlight>
 				<br/>
+				(If you're using the cloud version of summation, the gateway URL is: https://api.summation.app)
+				<br/>
 				<br/>
 				4.  Get your data by running a query:
 				<vue-code-highlight language="javascript">
@@ -87,6 +89,8 @@ summationClient.setOptions(options)
 </pre>
 				</vue-code-highlight>
 				<br/>
+				(If you're using the cloud version of summation, the gateway URL is: https://api.summation.app)
+				<br/>
 				<br/>
 				4.  Get your data by running a query:
 				<vue-code-highlight>
@@ -111,6 +115,8 @@ val client = Client(
 )
 </pre>
 				</vue-code-highlight>
+				<br/>
+				(If you're using the cloud version of summation, the gateway URL is: https://api.summation.app)
 				<br/>
 				<br/>
 				3.  Get your data by running a query:
