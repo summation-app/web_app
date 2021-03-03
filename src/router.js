@@ -4,7 +4,6 @@ import firebase from 'firebase'
 
 //const Login = () => import('@/views/Login') to allow cloak to work, so we don't see a flash of the sidebar when we refresh the login page, this isn't lazy loaded
 import Login from '@/views/Login.vue';
-import CloudLogin from '@/views/CloudLogin.vue';
 const Home = () => import('@/views/Home')
 const Settings = () => import('@/views/Settings')
 const Help = () => import('@/views/Help')
@@ -18,12 +17,6 @@ const Security = () => import('@/views/Security')
 
 Vue.use(Router)
 
-let login_component = Login;
-if(process.env.VUE_APP_ENV=='cloud')
-{
-  login_component = CloudLogin;
-}
-
 let router = new Router({
   //https://router.vuejs.org/en/essentials/history-mode.html
   mode: 'history', //won't use hashmode URLs, so requires we redirect 404 errors to index.html
@@ -32,7 +25,7 @@ let router = new Router({
     {
       path: '/login',
       name: 'Login',
-      component: login_component,
+      component: Login,
       meta: { hideNavigation: true }
     },
     {

@@ -477,7 +477,7 @@ export default {
 	  {
 		this.show_edit_dialog = false
 	  },
-	  edit_item(item)
+	  async edit_item(item)
 	  {
       console.log('edit item:' + item)
       this.edited_item = item
