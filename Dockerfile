@@ -2,6 +2,7 @@
 FROM alpine:3.7
 
 ENV VUE_APP_API_PREFIX=http://web_server:8000
+ENV VUE_APP_API_PORT 8000
 
 # Add nginx and nodejs
 RUN apk add --update nginx nodejs
