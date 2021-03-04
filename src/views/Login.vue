@@ -54,6 +54,7 @@ export default {
                         router.push(this.returnUrl)
                     },
                     error => {
+                        console.log(error)
                         this.error = error;
                         this.loading = false;
                     }

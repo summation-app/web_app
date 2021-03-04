@@ -4,7 +4,9 @@ export async function login(username, password)
 {
     //basic auth, ideally over HTTPS
 
-    var response = await axios.get(location.protocol + '//' + location.hostname + ':' + process.env.VUE_APP_API_PORT + '/login',
+    var url = location.protocol + '//' + location.hostname + ':' + process.env.VUE_APP_API_PORT + '/login';
+    console.log(url);
+    var response = await axios.get(url,
     {
         auth: {
             username: username,
@@ -20,9 +22,10 @@ export async function login(username, password)
         localStorage.setItem('token', response.data.token);
     }).catch(error => 
     {
+        console.log(error);
         console.log(error.response);
         logout();
-        location.reload(true);
+        //location.reload(true);
     });
 }
 
