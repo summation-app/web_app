@@ -26,15 +26,15 @@
 
         <v-stepper-items>
           <v-stepper-content step="1">
-            <add_api_or_database :gw="gw" v-on:saved="current_step += 1"></add_api_or_database>
+            <add_api_or_database :gw="gw" :api_prefix="api_prefix" v-on:saved="current_step += 1"></add_api_or_database>
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <user_auth :gw="gw" v-on:saved="saved_user_auth"></user_auth>            
+            <user_auth :gw="gw" :api_prefix="api_prefix" v-on:saved="saved_user_auth"></user_auth>            
           </v-stepper-content>
 
           <v-stepper-content step="3">
-            <client_setup :gw="gw" v-on:saved="save_auth_with_app_id"></client_setup>
+            <client_setup :gw="gw" :api_prefix="api_prefix" v-on:saved="save_auth_with_app_id"></client_setup>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>

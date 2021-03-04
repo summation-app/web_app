@@ -153,10 +153,9 @@
 const axios = require('axios').default;
 
 export default {
-	props: ['user','token','gw','item'],
+	props: ['user','token','gw','item','api_prefix'],
 	data() {
 		return {
-			api_prefix: process.env.VUE_APP_API_PREFIX,
 			pending_submit: false,
 			adding_library_api: false,
 			library_api_name: null,
@@ -332,13 +331,13 @@ export default {
 		if(this.item==null)
         {
           //saving a new API
-          var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/save_api', params);
+          var response = await axios.post(this.api_prefix + '/save_api', params);
         }
         else
         {
           //editing an existing API
           params.id = self.item.id;
-          var response = await axios.patch(process.env.VUE_APP_API_PREFIX + '/save_api', params);
+          var response = await axios.patch(this.api_prefix + '/save_api', params);
         }
 		
 		console.log(response);

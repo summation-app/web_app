@@ -328,7 +328,7 @@ const axios = require('axios').default;
 import DataTable from "@/components/DataTable.vue";
 
 export default {
-  props: ['user', 'token','gw'],
+  props: ['user', 'token','gw', 'api_prefix'],
   data: function () {
   return {
     selected_tab: null,
@@ -338,7 +338,6 @@ export default {
     apps_rows: [],
     all_databases: [],
     all_apis: [],
-    api_prefix: process.env.VUE_APP_API_PREFIX,
     logging_loading: false,
     logging_credentials: {
       'aws_cloudwatch': {
@@ -581,7 +580,7 @@ export default {
           'enabled': item.enabled
         };
 
-        var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/apps', params);
+        var response = await axios.post(self.api_prefix + '/apps', params);
         console.log(response);
         if(response.data!=null && response.data==true)
         {

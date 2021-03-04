@@ -43,7 +43,6 @@ export default {
 		  pending_submit: false,
 		  table_loading: false,
 		  selected_tab: null,
-		  //api_prefix: process.env.VUE_APP_API_PREFIX,
 		  approved_queries_rows: [],
 		  approved_requests_rows: [],
 		  approved_queries_headers: [],
@@ -127,7 +126,7 @@ export default {
 		  'enabled': item.enabled
         };
 
-        var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/approved_queries_requests', params);
+        var response = await axios.post(self.api_prefix + '/approved_queries_requests', params);
         console.log(response);
         if(response.data!=null && response.data==true)
         {

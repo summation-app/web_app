@@ -33,28 +33,6 @@
       </v-btn>
     </v-btn-toggle>
 
-    <v-container fluid id='cards_revenue' v-if="show_revenue_stats">
-      <v-row justify="center">
-        <v-col class="stat_cards"><h3>{{ revenue_stats.revenue }}</h3><br/><h5>Revenue</h5></v-col>
-        <v-col class="stat_cards"><h3>{{ revenue_stats.checkouts }}</h3><br/><h5>Orders</h5></v-col>
-        <v-col class="stat_cards"><h3>{{ attributable_revenue_percent }}%</h3><br/><h5>of Revenue from OnePress Fast Checkout</h5></v-col>
-      </v-row>
-    </v-container>
-
-    <v-container fluid id='cards_signin' v-if="show_signin_stats">
-      <v-row justify="center">
-        <v-col class="stat_cards"><h3>{{ analytics_summary.subscribers }}</h3><br/><h5>Signins to Fast Checkout</h5></v-col>
-        <v-col class="stat_cards"><h3>{{ analytics_summary.impressions }}</h3><br/><h5>'Add to Cart' Events</h5></v-col>
-        <v-col class="stat_cards"><h3>{{ conversion_rate_formatted }}%</h3><br/><h5>Conversion Rate</h5></v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col id='summary_stats_description' style='text-align: center'></v-col>
-      </v-row>
-    </v-container>
-    <div id='subscribers_chart' ref='subscribers_chart'>
-    </div>
-    <div id='funnel_chart'>
-    </div>
     <div id='logs'>
       <div v-for="log in log_history" :key="log.data">
         {{ log }}
@@ -68,139 +46,23 @@ const axios = require('axios').default;
 import Plotly from 'plotly.js-basic-dist-min'
 
 export default {
-    props: ['user','token','gw','websocket_prefix'],
+    props: ['user','token','gw','websocket_prefix','api_prefix'],
     data() {
         return {
             loading_analytics: false,
             analytics_summary: {},
             duration: '7',
             log_history: [],
-            api_prefix: process.env.VUE_APP_API_PREFIX,
-            demo_data: {
-              summary_stats: {"impressions":6400,"subscribers":130,"conversion_rate":2.03125},
-              protocol_stats: {"Google One Tap":{"2020-08-06":10,"2020-08-04":13,"2020-08-03":79},"Manual Email":{"2020-08-06":3,"2020-08-05":21,"2020-08-04":4}},
-              revenue_stats: {'revenue': 21639, 'checkouts': 927, 'currency': 'USD', 'onepress_checkouts': 23, 'onepress_total': 2157}
-            },
+            demo_data: {},
             displaying_demo_dashboard: false,
-            conversion_rate_formatted: null,
-            attributable_revenue_percent: 0,
-            show_signin_stats: true,
-            show_revenue_stats: false
         };
     },
     watch: 
     {
-      analytics_summary: function (val) 
-      {
-        this.conversion_rate_formatted = val.conversion_rate.toFixed(1)
-      },
-      revenue_stats: function(val)
-      {
-        if(this.revenue > 0)
-        {
-          this.attributable_revenue_percent = 100*(val.onepress_total/val.revenue).toFixed(1)
-        }
-      }
+      
     },
     methods: 
     {
-      async get_analytics()
-      {
-        try
-        {
-          let self = this;
-          self.loading_analytics = true;
-          var response = await axios.get(self.api_prefix + '/analytics',
-          {
-            params:
-            {
-              'organization_id': self.selected_organization,
-              'duration': parseInt(self.duration),
-            }
-          });
-          self.loading_analytics = false;
-          if(response.data.no_data==true)
-          {
-            self.setup_demo_dashboard()
-          }
-          else
-          {
-            self.analytics_summary = response.data.summary_stats;
-            self.protocol_stats = response.data.protocol_stats;
-            self.revenue_stats = response.data.revenue_stats;
-            self.create_charts(response.data)
-            if(self.revenue_stats.revenue > 0)
-            {
-              this.show_revenue_stats = true;
-              this.show_signin_stats = false;
-            }
-          }
-        }
-        catch (error)
-        {
-          console.error(error);
-        }
-      },
-      setup_demo_dashboard()
-      {
-        let self = this;
-        self.displaying_demo_dashboard = true;
-        self.analytics_summary = self.demo_data.summary_stats;
-        self.protocol_stats = self.demo_data.protocol_stats;
-        self.create_charts(self.demo_data)
-      },
-      create_charts(data)
-      {
-        //subscribers
-        var traces = [];
-
-        for (const [key, value] of Object.entries(data.protocol_stats)) 
-        {
-          var chart_data = 
-          {
-            x: Object.keys(value), //['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00'],
-            y: Object.values(value), //[1, 3, 6],
-            type: 'scatter',
-            name: key,
-            mode: 'lines',
-          };
-          traces.push(chart_data);
-        }
-
-        var layout = {
-          title: 'Customers Signed in to fast checkout via OnePress',
-          showlegend: true,
-          autorange: true,
-          xaxis: 
-          {
-            'tickformat': '%b %e'
-          }
-        };
-
-        console.log(traces);
-
-        Plotly.newPlot(this.$refs['subscribers_chart'], traces, layout, {displayModeBar: false});
-      },
-      percent_change_html: function(data)
-      {
-        if(data > 0)
-        {
-          return "<img src='" + require(`@/assets/arrow_up.svg`) + "' class='change_arrows'/> " + data + "%"
-        }
-        else if(data < 0)
-        {
-          return "<img src='" + require(`@/assets/arrow_down.svg`) + "' class='change_arrows'/> " + data + "%"
-        }
-        else if(data == 0)
-        {
-          return "- " + data + "%"
-        }
-        else
-        {
-          //null
-          return ""
-        }
-      },
       async setup_webhooks()
       {
         let self = this;

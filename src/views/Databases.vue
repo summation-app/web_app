@@ -46,12 +46,11 @@ import DataTable from "@/components/DataTable.vue";
 import AddDatabase from "@/components/AddDatabase.vue";
 
 export default {
-	props: ['user','token','gw'],
+	props: ['user','token','gw','api_prefix'],
 	data() {
 		return {
 		  pending_submit: false,
 		  table_loading: false,
-		  api_prefix: process.env.VUE_APP_API_PREFIX,
 		  rows: [],
 		  headers: [],
 		  show_edit_dialog: false,

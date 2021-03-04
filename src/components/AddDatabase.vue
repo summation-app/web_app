@@ -63,10 +63,9 @@
 const axios = require('axios').default;
 
 export default {
-	props: ['user','token','gw','item'],
+	props: ['user','token','gw','item','api_prefix'],
 	data() {
 		return {
-          api_prefix: process.env.VUE_APP_API_PREFIX,
           pending_submit: false,
           show_alert: false,
           alert_type: 'success',
@@ -155,13 +154,13 @@ export default {
         if(this.item==null)
         {
           //saving a new database
-          var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/save_database', params);
+          var response = await axios.post(this.api_prefix + '/save_database', params);
         }
         else
         {
           //editing an existing database
           params.id = self.item.id;
-          var response = await axios.patch(process.env.VUE_APP_API_PREFIX + '/save_database', params);
+          var response = await axios.patch(this.api_prefix + '/save_database', params);
         }
         console.log(response);
         if(response.data!=null)

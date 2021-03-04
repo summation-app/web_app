@@ -57,7 +57,6 @@
 
       <!-- If using vue-router -->
       <router-view
-        v-if="gw"
         :api_prefix="api_prefix"
         :websocket_prefix="websocket_prefix"
         :user="user"
@@ -69,7 +68,7 @@
         @logged_in="initialize_gateway"
       >
       </router-view>
-      <div v-else>
+      <!--<div v-else>
         <v-progress-circular
         id="loading_spinner"
         indeterminate
@@ -77,7 +76,7 @@
         color="primary"
         >
         </v-progress-circular>
-      </div>
+      </div>-->
     </v-container>
   </v-content>
 
@@ -158,6 +157,8 @@ export default {
   created()
   {
         let self = this;
+
+        console.log('in app api prefix is:' + self.api_prefix);
 
         this.initialize_gateway();
 

@@ -143,7 +143,7 @@ const axios = require('axios').default;
 import { component as VueCodeHighlight } from 'vue-code-highlight';
 
 export default {
-	props: ['user','token','gw'],
+	props: ['user','token','gw','api_prefix'],
 	data() {
 		return {
 		  valid: false,
@@ -175,7 +175,7 @@ export default {
 		
 		this.pending_submit = true;
 
-		var response = await axios.post(process.env.VUE_APP_API_PREFIX + '/generate_gateway_tokens_for_new_app',
+		var response = await axios.post(this.api_prefix + '/generate_gateway_tokens_for_new_app',
 		{
 			'token': localStorage.getItem('token'),
 			'app_name': this.app_name,

@@ -273,14 +273,13 @@
 <script>
 const axios = require('axios').default;
 export default {
-	props: ['user','token','gw','app_id'],//'api_prefix'
+	props: ['user','token','gw','app_id','api_prefix'],
 	data() {
 		return {
 			pending_submit: false,
 			selected_auth_method: null,
 			selected_jwt_method: null,
 			role_search_path: null,
-			api_prefix: process.env.VUE_APP_API_PREFIX,
 			jwt_parameters: {},
 			selected_panel: null,
 			record_id: null
