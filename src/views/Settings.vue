@@ -394,8 +394,6 @@ export default {
     show_alert: false,
     integrations_loading: false,
     access_controls_saving: false,
-    all_apis: [],
-    all_databases: [],
     show_edit_dialog: false,
 		show_delete_dialog: false,
 		item_to_delete: null,
